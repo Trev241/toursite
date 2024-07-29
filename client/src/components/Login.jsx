@@ -6,6 +6,15 @@ const Login = ({ onClose, onSwitchToSignUp }) => {
       onClose();
     }
   };
+  const handleSubmit = async (e) =>{
+    e.preventDefault()
+    e.stopPropagation()
+    try{const response=await fetch ("http://localhost:8081/api/v1/clients")
+      console.log(response)
+    }
+    catch(err){console.error(err)}
+
+  }
 
   return (
     <div
@@ -14,10 +23,10 @@ const Login = ({ onClose, onSwitchToSignUp }) => {
     >
       <div
         className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full"
-        onClick={(e) => e.stopPropagation()}
+       
       >
         <h2 className="text-3xl font-bold mb-6 text-center">Login</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4 relative">
             <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
               <i className="fas fa-envelope"></i>
