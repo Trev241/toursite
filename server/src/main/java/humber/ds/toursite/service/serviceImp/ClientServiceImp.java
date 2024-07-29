@@ -1,7 +1,7 @@
 package humber.ds.toursite.service.serviceImp;
 
 import humber.ds.toursite.model.Client;
-import humber.ds.toursite.model.ClientNotFoundException;
+import humber.ds.toursite.exceptions.ClientNotFoundException;
 import humber.ds.toursite.repository.ClientRepository;
 import humber.ds.toursite.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
