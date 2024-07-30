@@ -9,11 +9,24 @@ const Login = ({ onClose, onSwitchToSignUp }) => {
   const handleSubmit = async (e) =>{
     e.preventDefault()
     e.stopPropagation()
-    try{const response=await fetch ("http://localhost:8081/api/v1/clients")
-      console.log(response)
-    }
-    catch(err){console.error(err)}
 
+    try {
+      const response = await fetch("http://localhost:8081/api/v1/clients")
+      const body = await response.json();
+      console.log(body)
+    }
+    catch (err) {
+      console.error(err)
+    }
+    
+    // ALTERNATIVE USING THEN/CATCH
+    // fetch("http://localhost:8081/api/v1/clients")
+    //   .then(response => {
+    //     console.log(response);
+    //     console.log("Will only run after fetch completes or fails");
+    //   })
+    //   .catch(err => console.error(err))
+    
   }
 
   return (
