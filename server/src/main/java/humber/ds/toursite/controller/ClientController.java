@@ -53,7 +53,7 @@ public class ClientController {
                 ? HttpStatus.OK
                 : HttpStatus.FORBIDDEN;
 
-        return new ResponseEntity<>(status);
+        return new ResponseEntity<>(client, status);
     }
 
     @GetMapping("/clients/{id}")
