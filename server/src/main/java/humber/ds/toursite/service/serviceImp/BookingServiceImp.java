@@ -77,7 +77,7 @@ public class BookingServiceImp implements BookingService {
         bookingRepository.save(booking);
 
         List<Booking> waitingBookings = bookingRepository.findBySiteIdAndStatus(booking.getSiteId(), BookingStatus.PENDING);
-        notifyClients(waitingBookings);
+        notifyClients(waitingBookings, booking.getCheck_in_date(), booking.getCheck_out_date());
     }
 
     @Override
@@ -104,24 +104,31 @@ public class BookingServiceImp implements BookingService {
         );
     }
 
-    private void notifyClients(List<Booking> bookings) {
+    private void notifyClients(List<Booking> bookings, LocalDate canceledCheckIn, LocalDate canceledCheckOut) {
         Map<Long, Client> notifiedClients = new HashMap<>();
         for (Booking booking : bookings) {
 
-            if (checkAvailability(booking.getSiteId(), booking.getCheck_in_date(), booking.getCheck_out_date())
+            if (datesOverlap(canceledCheckIn, canceledCheckOut,
+                    booking.getCheck_in_date(), booking.getCheck_out_date())
                 && !notifiedClients.containsKey(booking.getClientId())) {
+
+
                 Client client = clientRepository.findById(booking.getClientId())
                         .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + booking.getClientId()));
 
                 notifiedClients.put(booking.getClientId(), client);
 
                 String message = String.format("Dear %s, the site you were interested in is now available from %s to %s. Please visit our website to confirm your booking.",
-                        client.getUsername(), booking.getCheck_in_date(), booking.getCheck_out_date());
-                emailService.sendEmail(client.getEmail(), "Site Availability Notification", message);
+                        client.getUsername(), canceledCheckIn, canceledCheckOut);
+//                emailService.sendEmail(client.getEmail(), "Site Availability Notification", message);
                 System.out.println(client.getEmail());
                 System.out.println(message);
             }
         }
+    }
+
+    private boolean datesOverlap(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+        return start1.isBefore(end2) && start2.isBefore(end1);
     }
 
 }
