@@ -41,7 +41,8 @@ public class SiteServiceImp implements SiteService {
                     site.setCountry(newSite.getCountry());
                     site.setPhone(newSite.getPhone());
                     site.setStatus(newSite.getStatus());
-
+                    site.setPrice(newSite.getPrice());
+                    site.setDescription(newSite.getDescription());
                     return site;
                 }).orElseGet(() -> {
                     return siteRepository.save(newSite);

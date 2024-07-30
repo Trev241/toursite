@@ -15,11 +15,13 @@ public class Site {
     private String country;
     private String phone;
     private SiteStatus status;
+    private float price;
+    private String description;
 
     Site() {
     }
 
-    Site(double rate, String street, String city, String zip, String country, String phone, SiteStatus status) {
+    Site(double rate, String street, String city, String zip, String country, String phone, SiteStatus status, float price, String description) {
         this.rate = rate;
         this.street = street;
         this.city = city;
@@ -27,6 +29,8 @@ public class Site {
         this.country = country;
         this.phone = phone;
         this.status = status;
+        this.price = price;
+        this.description = description;
     }
 
     public Long getId() {
@@ -91,5 +95,21 @@ public class Site {
 
     public void setStatus(SiteStatus status) {
         this.status = status;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
