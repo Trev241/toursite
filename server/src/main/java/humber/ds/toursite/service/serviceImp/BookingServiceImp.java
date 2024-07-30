@@ -80,14 +80,10 @@ public class BookingServiceImp implements BookingService {
         notifyClients(waitingBookings, booking.getCheck_in_date(), booking.getCheck_out_date());
     }
 
-    @Override
-    public void sendNotify() {
-
-    }
 
     @Override
     public List<Booking> getBookingsByClientID(Long clientId) {
-        return null;
+        return bookingRepository.findByClientId(clientId);
     }
 
 

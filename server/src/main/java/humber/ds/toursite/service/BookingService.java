@@ -9,6 +9,5 @@ public interface BookingService {
     Booking insertBooking(Long clientId, Long siteId, LocalDate checkInDate, LocalDate checkOutDate);
     List<Booking> getAllBooking();
     void cancelBooking(Long id);
-    void sendNotify();
     List<Booking> getBookingsByClientID(Long clientId);
 }
