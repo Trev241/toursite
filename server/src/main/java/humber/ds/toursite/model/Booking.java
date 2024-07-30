@@ -1,29 +1,32 @@
 package humber.ds.toursite.model;
 
 import humber.ds.toursite.enums.BookingStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 public class Booking {
     @Id
     @GeneratedValue
     private Long id;
-    private Long site_id;
-    private Long user_id;
-    private Date booking_date;
-    private Date check_in_date;
-    private Date check_out_date;
+    private Long siteId;
+    private Long clientId;
+    private LocalDateTime booking_date;
+    private LocalDate check_in_date;
+    private LocalDate check_out_date;
     private BookingStatus status;
     private double total_price;
 
-    public Booking(Long id, Long site_id, Long user_id, Date booking_date, Date check_in_date, Date check_out_date, BookingStatus status, double total_price) {
+    public Booking() {}
+
+    public Booking(Long id, Long siteId, Long clientId, LocalDateTime booking_date,
+                   LocalDate check_in_date, LocalDate check_out_date, BookingStatus status, double total_price) {
         this.id = id;
-        this.site_id = site_id;
-        this.user_id = user_id;
+        this.siteId = siteId;
+        this.clientId = clientId;
         this.booking_date = booking_date;
         this.check_in_date = check_in_date;
         this.check_out_date = check_out_date;
@@ -39,43 +42,43 @@ public class Booking {
         this.id = id;
     }
 
-    public Long getSite_id() {
-        return site_id;
+    public Long getSiteId() {
+        return siteId;
     }
 
-    public void setSite_id(Long site_id) {
-        this.site_id = site_id;
+    public void setSiteId(Long siteId) {
+        this.siteId = siteId;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getClientId() {
+        return clientId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
     }
 
-    public Date getBooking_date() {
+    public LocalDateTime getBooking_date() {
         return booking_date;
     }
 
-    public void setBooking_date(Date booking_date) {
+    public void setBooking_date(LocalDateTime booking_date) {
         this.booking_date = booking_date;
     }
 
-    public Date getCheck_in_date() {
+    public LocalDate getCheck_in_date() {
         return check_in_date;
     }
 
-    public void setCheck_in_date(Date check_in_date) {
+    public void setCheck_in_date(LocalDate check_in_date) {
         this.check_in_date = check_in_date;
     }
 
-    public Date getCheck_out_date() {
+    public LocalDate getCheck_out_date() {
         return check_out_date;
     }
 
-    public void setCheck_out_date(Date check_out_date) {
+    public void setCheck_out_date(LocalDate check_out_date) {
         this.check_out_date = check_out_date;
     }
 
