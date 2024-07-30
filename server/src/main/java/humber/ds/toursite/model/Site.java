@@ -19,6 +19,7 @@ public class Site {
     private String description;
 
     Site() {
+        this.status = SiteStatus.AVAILABLE;
     }
 
     Site(double rate, String street, String city, String zip, String country, String phone, SiteStatus status, double price, String description) {
