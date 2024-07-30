@@ -8,7 +8,7 @@ import java.util.List;
 public interface BookingService {
     Booking insertBooking(Long clientId, Long siteId, LocalDate checkInDate, LocalDate checkOutDate);
     List<Booking> getAllBooking();
-    Booking updateBookingStatus(Booking booking, Long id);
+    void cancelBooking(Long id);
     void sendNotify();
     List<Booking> getBookingsByClientID(Long clientId);
 }

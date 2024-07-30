@@ -4,6 +4,7 @@ import humber.ds.toursite.model.Booking;
 import humber.ds.toursite.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -27,11 +28,16 @@ public class BookingController {
             @RequestParam LocalDate checkOutDate) {
 
         Booking createdBooking = bookingService.insertBooking(clientId, siteId, checkInDate, checkOutDate);
-        return createdBooking;  
+        return createdBooking;
     }
 
     @GetMapping(value = "/bookings")
     public List<Booking> getAllBookings() {
         return bookingService.getAllBooking();
+    }
+
+    @PutMapping("/{bookingId}/cancel")
+    public void cancelBooking(@PathVariable Long bookingId) {
+        bookingService.cancelBooking(bookingId);
     }
 }
