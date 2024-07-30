@@ -4,32 +4,66 @@ import { BiSearch } from 'react-icons/bi';
 import { AiOutlineClose } from 'react-icons/ai';
 import { HiOutlineMenuAlt4 } from 'react-icons/hi'; 
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
-import AuthModal from './AuthModal'; // Adjust the path as needed
 
-function Navbar({ onAuthModalToggle }) {
+function Navbar({ onAuthModalToggle, username, onLogout }) {
   const [nav, setNav] = useState(false);
   const [logo, setLogo] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleNav = () => {
     setNav(!nav);
     setLogo(!logo);
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
   return (
     <div className='flex w-full justify-between items-center h-20 px-4 absolute z-10 text-white'>
-      <div>
+      <div className='flex items-center'>
         <h1 onClick={handleNav} className={logo ? 'hidden' : 'block'}>TOURSITE.</h1>
+        <ul className='hidden md:flex ml-10'>
+          <li className='mr-6'>Home</li>
+          <li className='mr-6'>Destinations</li>
+          <li className='mr-6'>Travel</li>
+          <li className='mr-6'>About</li>
+          <li className='mr-6'>Blogs</li>
+        </ul>
       </div>
-      <ul className='hidden md:flex'>
-        <li>Home</li>
-        <li>Destinations</li>
-        <li>Travel</li>
-        <li>About</li>
-        <li>Blogs</li>
-      </ul>
-      <div className='hidden md:flex'>
-        <BiSearch className='mr-2' size={20} />
-        <BsPerson size={20} onClick={onAuthModalToggle} className='cursor-pointer' />
+      <div className='flex items-center space-x-4'>
+        <BiSearch className='hidden md:block' size={20} />
+        <div className='relative'>
+          <BsPerson size={20} onClick={onAuthModalToggle} className='cursor-pointer' />
+        </div>
+        {username && (
+          <div className='relative'>
+            <div className='cursor-pointer' onClick={toggleDropdown}>
+              <h2 className='text-sm'>{username}</h2>
+            </div>
+            {dropdownOpen && (
+              <div className='absolute top-full right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg p-4'>
+                <img 
+                  src="https://via.placeholder.com/50" 
+                  alt="Profile" 
+                  className='w-12 h-12 rounded-full mx-auto mb-2'
+                />
+                <div className='flex flex-col items-center'>
+                  <a href="/profile" className='text-blue-500 hover:underline mb-2'>View Profile</a>
+                  <button 
+                    onClick={() => {
+                      onLogout(); // Call the logout function
+                      setDropdownOpen(false); // Close the dropdown
+                    }} 
+                    className='text-red-500 hover:underline'
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* mobile menu */}
