@@ -8,6 +8,7 @@ import Img5 from "../../assets/places/place5.jpg";
 import Img6 from "../../assets/places/place6.jpg";
 import { useNavigate } from 'react-router-dom';
 
+
 const PlacesData = [
   {
     img: Img1,
@@ -31,6 +32,7 @@ const PlacesData = [
     title: "Underwater",
     location: "US",
     description: "An amazing underwater view.",
+    description: "An amazing underwater view.",
     price: 6200,
     type: "Cultural Relax",
   },
@@ -47,18 +49,22 @@ const PlacesData = [
     title: "Los Angeles",
     location: "United states",
     description: "Explore the vibrant city of Los Angeles.",
+    description: "Explore the vibrant city of Los Angeles.",
     price: 6700,
     type: "Cultural Relax",
   },
   {
     img: Img6,
     title: "Las Vegas",
+    title: "Las Vegas",
     location: "California",
+    description: "Experience the excitement of Las Vegas.",
     description: "Experience the excitement of Las Vegas.",
     price: 6200,
     type: "Cultural Relax",
   },
 ];
+
 
 const Places = () => {
   const navigate = useNavigate();
