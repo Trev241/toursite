@@ -36,13 +36,18 @@ public class BookingServiceImp implements BookingService {
         Site site = siteRepository.findById(siteId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid site ID: " + siteId));
 
+        BookingStatus bookingStatus = checkAvailability(siteId, checkInDate, checkOutDate)
+                ? BookingStatus.PROCESSING
+                : BookingStatus.PENDING;
+
         Booking booking = new Booking();
         booking.setClientId(clientId);
         booking.setSiteId(siteId);
         booking.setCheck_in_date(checkInDate);
         booking.setCheck_out_date(checkOutDate);
+        booking.setStatus(bookingStatus);
         booking.setBooking_date(LocalDateTime.now());
-        booking.setStatus(BookingStatus.PENDING);
+
 
         int nights = (int) ChronoUnit.DAYS.between(checkInDate, checkOutDate);
         booking.setTotal_price(calculateTotalPrice(site.getPrice(), nights));
@@ -52,6 +57,15 @@ public class BookingServiceImp implements BookingService {
 
     private double calculateTotalPrice(double pricePerNight, int nights) {
         return pricePerNight * nights;
+    }
+
+    private boolean checkAvailability(Long siteId, LocalDate checkInDate, LocalDate checkOutDate) {
+        List<Booking> bookings = bookingRepository.findBySiteIdAndStatus(siteId, BookingStatus.CONFIRMED);
+
+        return bookings.stream().noneMatch(booking ->
+                (checkInDate.isBefore(booking.getCheck_out_date()) &&
+                        checkOutDate.isAfter(booking.getCheck_in_date()))
+        );
     }
 
     @Override
