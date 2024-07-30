@@ -25,6 +25,11 @@ public class ClientServiceImp implements ClientService {
     }
 
     @Override
+    public List<Client> findByEmail(String email) {
+        return clientRepository.findByEmail(email);
+    }
+
+    @Override
     public Client one(Long id) {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException());
@@ -43,8 +48,8 @@ public class ClientServiceImp implements ClientService {
 
                     return clientRepository.save(client);
                 }).orElseGet(() -> {
-            return clientRepository.save(newClient);
-        });
+                    return clientRepository.save(newClient);
+                });
     }
 
     @Override
