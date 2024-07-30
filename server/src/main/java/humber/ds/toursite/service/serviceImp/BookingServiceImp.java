@@ -56,7 +56,7 @@ public class BookingServiceImp implements BookingService {
 
     @Override
     public List<Booking> getAllBooking() {
-        return null;
+        return bookingRepository.findAll();
     }
 
     @Override

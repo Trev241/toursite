@@ -1,21 +1,27 @@
 package humber.ds.toursite.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import humber.ds.toursite.enums.BookingStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @Entity
 public class Booking {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long siteId;
     private Long clientId;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime booking_date;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate check_in_date;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate check_out_date;
     private BookingStatus status;
     private double total_price;

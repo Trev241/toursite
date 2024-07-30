@@ -3,11 +3,14 @@ package humber.ds.toursite.model;
 import humber.ds.toursite.enums.SiteStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Site {
-    private @Id @GeneratedValue Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private double rate;
     private String street;
     private String city;
