@@ -37,7 +37,7 @@ public class CouponController {
             status = HttpStatus.OK;
 
             coupon.setRedeemed(true);
-            couponService.replaceCoupon(coupon, coupon.getId());
+            couponService.saveCoupon(coupon);
         } else
             status = HttpStatus.BAD_REQUEST;
 
