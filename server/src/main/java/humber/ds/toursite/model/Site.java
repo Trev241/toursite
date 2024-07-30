@@ -15,13 +15,13 @@ public class Site {
     private String country;
     private String phone;
     private SiteStatus status;
-    private float price;
+    private double price;
     private String description;
 
     Site() {
     }
 
-    Site(double rate, String street, String city, String zip, String country, String phone, SiteStatus status, float price, String description) {
+    Site(double rate, String street, String city, String zip, String country, String phone, SiteStatus status, double price, String description) {
         this.rate = rate;
         this.street = street;
         this.city = city;
@@ -97,11 +97,11 @@ public class Site {
         this.status = status;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
