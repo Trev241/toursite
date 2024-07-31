@@ -68,7 +68,7 @@ public class BookingServiceImp implements BookingService {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid booking ID: " + id));
 
-        booking.setStatus(BookingStatus.CANCELED);
+        booking.setStatus(BookingStatus.CANCELLED);
         bookingRepository.save(booking);
 
         List<Booking> waitingBookings = bookingRepository.findBySiteIdAndStatus(booking.getSiteId(),
