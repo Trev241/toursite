@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 const PlacesData = [
   {
+    id: 1,
     img: Img1,
     title: "Boat",
     location: "USA",
@@ -19,6 +20,7 @@ const PlacesData = [
     type: "Cultural Relax",
   },
   {
+    id: 2,
     img: Img2,
     title: "Taj Mahal",
     location: "India",
@@ -28,6 +30,7 @@ const PlacesData = [
     type: "Cultural Relax",
   },
   {
+    id: 3,
     img: Img3,
     title: "Underwater",
     location: "US",
@@ -37,6 +40,7 @@ const PlacesData = [
     type: "Cultural Relax",
   },
   {
+    id: 4,
     img: Img4,
     title: "Sydney",
     location: "USA",
@@ -45,6 +49,7 @@ const PlacesData = [
     type: "Cultural Relax",
   },
   {
+    id: 5,
     img: Img5,
     title: "Los Angeles",
     location: "United states",
@@ -54,6 +59,7 @@ const PlacesData = [
     type: "Cultural Relax",
   },
   {
+    id: 6,
     img: Img6,
     title: "Las Vegas",
     title: "Las Vegas",
