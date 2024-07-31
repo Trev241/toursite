@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import humber.ds.toursite.model.Coupon;
-import humber.ds.toursite.model.Payment;
 import humber.ds.toursite.repository.CouponRepository;
 import humber.ds.toursite.service.CouponService;
 import humber.ds.toursite.service.PaymentService;

@@ -8,7 +8,6 @@ import humber.ds.toursite.repository.BookingRepository;
 import humber.ds.toursite.repository.ClientRepository;
 import humber.ds.toursite.repository.SiteRepository;
 import humber.ds.toursite.service.BookingService;
-import humber.ds.toursite.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,22 +23,19 @@ public class BookingServiceImp implements BookingService {
     private final BookingRepository bookingRepository;
     private final ClientRepository clientRepository;
     private final SiteRepository siteRepository;
-    private final EmailService emailService;
 
     @Autowired
     public BookingServiceImp(BookingRepository bookingRepository,
             ClientRepository clientRepository,
-            SiteRepository siteRepository,
-            EmailService emailService) {
+            SiteRepository siteRepository) {
         this.bookingRepository = bookingRepository;
         this.clientRepository = clientRepository;
         this.siteRepository = siteRepository;
-        this.emailService = emailService;
     }
 
     @Override
     public Booking insertBooking(Long clientId, Long siteId, LocalDate checkInDate, LocalDate checkOutDate) {
-        Client client = clientRepository.findById(clientId)
+        clientRepository.findById(clientId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid client ID: " + clientId));
         Site site = siteRepository.findById(siteId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid site ID: " + siteId));

@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import humber.ds.toursite.exceptions.SiteNotFoundException;
 import humber.ds.toursite.model.Site;
-import humber.ds.toursite.repository.SiteRepository;
 
 @RestController
 @RequestMapping("/api/v1")
