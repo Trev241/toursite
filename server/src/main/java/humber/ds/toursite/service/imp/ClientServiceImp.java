@@ -1,4 +1,4 @@
-package humber.ds.toursite.service.serviceImp;
+package humber.ds.toursite.service.imp;
 
 import humber.ds.toursite.model.Client;
 import humber.ds.toursite.exceptions.ClientNotFoundException;

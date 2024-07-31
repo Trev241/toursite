@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import humber.ds.toursite.model.Coupon;
 import humber.ds.toursite.service.CouponService;
+import humber.ds.toursite.service.imp.CouponServiceImp.RedemptionRequest;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -29,20 +30,8 @@ public class CouponController {
     }
 
     @PostMapping("/coupons/redeem")
-    ResponseEntity<Object> redeem(@RequestBody Coupon details) {
-        Coupon coupon = couponService.findByCode(details.getCode());
-        HttpStatus status;
-
-        if (coupon != null) {
-            status = HttpStatus.OK;
-
-            coupon.setRedeemed(true);
-            couponService.saveCoupon(coupon);
-        } else
-            status = HttpStatus.BAD_REQUEST;
-
-        // TODO: Link coupon to payment ID
-        return new ResponseEntity<>(coupon, status);
+    Coupon redeem(@RequestBody RedemptionRequest redemptionRequest) {
+        return couponService.redeem(redemptionRequest.getCode(), redemptionRequest.getPaymentId());
     }
 
     @PostMapping("/coupons")

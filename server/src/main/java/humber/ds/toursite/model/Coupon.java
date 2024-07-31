@@ -2,19 +2,20 @@ package humber.ds.toursite.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" }) // Handle lazy loading
 public class Coupon {
     private @Id @GeneratedValue Long id;
     private String code;
     private boolean redeemed;
     private double discountRate;
     private double flatDiscount;
-
-    // TODO: Create foreign key reference to payment
 
     Coupon() {
         this.code = Integer.toString(Objects.hash(this.id, System.currentTimeMillis()));

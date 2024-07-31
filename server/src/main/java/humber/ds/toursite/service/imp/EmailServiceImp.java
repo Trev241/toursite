@@ -1,11 +1,10 @@
-package humber.ds.toursite.service.serviceImp;
+package humber.ds.toursite.service.imp;
 
 import humber.ds.toursite.service.EmailService;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class EmailServiceImp implements EmailService {

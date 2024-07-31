@@ -1,4 +1,4 @@
-package humber.ds.toursite.service.serviceImp;
+package humber.ds.toursite.service.imp;
 
 import humber.ds.toursite.enums.BookingStatus;
 import humber.ds.toursite.model.Booking;
@@ -28,9 +28,9 @@ public class BookingServiceImp implements BookingService {
 
     @Autowired
     public BookingServiceImp(BookingRepository bookingRepository,
-                             ClientRepository clientRepository,
-                             SiteRepository siteRepository,
-                             EmailService emailService) {
+            ClientRepository clientRepository,
+            SiteRepository siteRepository,
+            EmailService emailService) {
         this.bookingRepository = bookingRepository;
         this.clientRepository = clientRepository;
         this.siteRepository = siteRepository;
@@ -56,7 +56,6 @@ public class BookingServiceImp implements BookingService {
         booking.setStatus(bookingStatus);
         booking.setBooking_date(LocalDateTime.now());
 
-
         int nights = (int) ChronoUnit.DAYS.between(checkInDate, checkOutDate);
         booking.setTotal_price(calculateTotalPrice(site.getPrice(), nights));
 
@@ -76,16 +75,15 @@ public class BookingServiceImp implements BookingService {
         booking.setStatus(BookingStatus.CANCELED);
         bookingRepository.save(booking);
 
-        List<Booking> waitingBookings = bookingRepository.findBySiteIdAndStatus(booking.getSiteId(), BookingStatus.PENDING);
+        List<Booking> waitingBookings = bookingRepository.findBySiteIdAndStatus(booking.getSiteId(),
+                BookingStatus.PENDING);
         notifyClients(waitingBookings, booking.getCheck_in_date(), booking.getCheck_out_date());
     }
-
 
     @Override
     public List<Booking> getBookingsByClientID(Long clientId) {
         return bookingRepository.findByClientId(clientId);
     }
-
 
     private double calculateTotalPrice(double pricePerNight, int nights) {
         return pricePerNight * nights;
@@ -94,10 +92,8 @@ public class BookingServiceImp implements BookingService {
     private boolean checkAvailability(Long siteId, LocalDate checkInDate, LocalDate checkOutDate) {
         List<Booking> bookings = bookingRepository.findBySiteIdAndStatus(siteId, BookingStatus.CONFIRMED);
 
-        return bookings.stream().noneMatch(booking ->
-                (checkInDate.isBefore(booking.getCheck_out_date())
-                        && checkOutDate.isAfter(booking.getCheck_in_date()))
-        );
+        return bookings.stream().noneMatch(booking -> (checkInDate.isBefore(booking.getCheck_out_date())
+                && checkOutDate.isAfter(booking.getCheck_in_date())));
     }
 
     private void notifyClients(List<Booking> bookings, LocalDate canceledCheckIn, LocalDate canceledCheckOut) {
@@ -106,17 +102,18 @@ public class BookingServiceImp implements BookingService {
 
             if (datesOverlap(canceledCheckIn, canceledCheckOut,
                     booking.getCheck_in_date(), booking.getCheck_out_date())
-                && !notifiedClients.containsKey(booking.getClientId())) {
-
+                    && !notifiedClients.containsKey(booking.getClientId())) {
 
                 Client client = clientRepository.findById(booking.getClientId())
                         .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + booking.getClientId()));
 
                 notifiedClients.put(booking.getClientId(), client);
 
-                String message = String.format("Dear %s, the site you were interested in is now available from %s to %s. Please visit our website to confirm your booking.",
+                String message = String.format(
+                        "Dear %s, the site you were interested in is now available from %s to %s. Please visit our website to confirm your booking.",
                         client.getUsername(), canceledCheckIn, canceledCheckOut);
-//                emailService.sendEmail(client.getEmail(), "Site Availability Notification", message);
+                // emailService.sendEmail(client.getEmail(), "Site Availability Notification",
+                // message);
                 System.out.println(client.getEmail());
                 System.out.println(message);
             }
@@ -126,5 +123,4 @@ public class BookingServiceImp implements BookingService {
     private boolean datesOverlap(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
         return start1.isBefore(end2) && start2.isBefore(end1);
     }
-
 }
