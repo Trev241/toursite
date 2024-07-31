@@ -42,38 +42,38 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-6xl">
+    <div className="container mx-auto p-6 max-w-5xl">
       <div className="flex flex-col items-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-800">Payment</h1>
+        <h1 className="text-4xl font-bold text-gray-900">Payment</h1>
       </div>
-      <div className="flex justify-between items-start gap-8">
+      <div className="flex gap-8">
         {/* Back Arrow */}
         {showCreditCard && (
-          <div className="absolute top-4 left-4 cursor-pointer text-blue-500" onClick={handleBack}>
+          <div className="absolute top-4 left-4 cursor-pointer text-blue-600" onClick={handleBack}>
             <FaArrowLeft className="text-2xl" />
           </div>
         )}
 
         {/* Left Section: Order Summary */}
-        <div className="w-1/2 bg-white p-6 rounded-lg shadow-lg border border-gray-200">
-          <h2 className="text-3xl font-extrabold mb-6 text-gray-800">Order Summary</h2>
-          <div className="bg-gray-50 p-4 rounded-lg shadow-inner mb-8">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Total $134.98</h3>
-            <ul className="space-y-3">
-              <li className="flex justify-between text-gray-600">
-                <span className="font-medium">Tourism plan</span>
+        <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md border border-gray-300">
+          <h2 className="text-3xl font-extrabold mb-6 text-gray-900">Order Summary</h2>
+          <div className="bg-gray-100 p-5 rounded-lg shadow-inner mb-8">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">Total $134.98</h3>
+            <ul className="space-y-4">
+              <li className="flex justify-between text-gray-700">
+                <span className="font-medium">Tourism Plan</span>
                 <span className="font-semibold">$15.00</span>
               </li>
-              <li className="flex justify-between text-gray-600">
+              <li className="flex justify-between text-gray-700">
                 <span className="font-medium">HST TAX%</span>
                 <span className="font-semibold">Free</span>
               </li>
-              <li className="flex justify-between text-gray-600">
-                <span className="font-medium">Service charges</span>
+              <li className="flex justify-between text-gray-700">
+                <span className="font-medium">Service Charges</span>
                 <span className="font-semibold">$69.99</span>
               </li>
-              <li className="flex justify-between text-gray-600">
-                <span className="font-medium">Other fees</span>
+              <li className="flex justify-between text-gray-700">
+                <span className="font-medium">Other Fees</span>
                 <span className="font-semibold">$49.99</span>
               </li>
             </ul>
@@ -81,10 +81,10 @@ const PaymentPage = () => {
         </div>
 
         {/* Right Section: Conditional Content */}
-        <div className="w-1/2 bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+        <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md border border-gray-300">
           {showCreditCard ? (
             <>
-              <h3 className="text-2xl font-semibold mb-6 text-gray-800">Credit Card Details</h3>
+              <h3 className="text-2xl font-semibold mb-6 text-gray-900">Credit Card Details</h3>
               <div className="mb-4">
                 <label className="block text-gray-700 font-medium">Card Number *</label>
                 <input
@@ -93,7 +93,7 @@ const PaymentPage = () => {
                   placeholder="1234 5678 9012 3456"
                   value={creditCard.cardNumber}
                   onChange={handleCreditCardChange}
-                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -106,7 +106,7 @@ const PaymentPage = () => {
                     placeholder="John Doe"
                     value={creditCard.cardName}
                     onChange={handleCreditCardChange}
-                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -118,7 +118,7 @@ const PaymentPage = () => {
                     placeholder="MM/YY"
                     value={creditCard.expiryDate}
                     onChange={handleCreditCardChange}
-                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -131,35 +131,35 @@ const PaymentPage = () => {
                   placeholder="123"
                   value={creditCard.cvv}
                   onChange={handleCreditCardChange}
-                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
-              <div className="flex items-center space-x-2 mb-4">
-                <FaCcVisa className="text-blue-500 text-xl" />
-                <FaCcMastercard className="text-red-500 text-xl" />
-                <FaCcAmex className="text-green-500 text-xl" />
+              <div className="flex items-center space-x-3 mb-6">
+                <FaCcVisa className="text-blue-600 text-xl" />
+                <FaCcMastercard className="text-red-600 text-xl" />
+                <FaCcAmex className="text-green-600 text-xl" />
               </div>
-              <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-4 mb-6">
                 <input
                   type="text"
                   placeholder="Coupon Code"
-                  className="w-3/4 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <button className="w-1/4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+                <button className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
                   REDEEM
                 </button>
               </div>
               <button
                 type="button"
-                className="bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600 transition duration-300"
+                className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition duration-300 w-full"
               >
                 Confirm Payment
               </button>
             </>
           ) : (
             <form onSubmit={handleSubmit}>
-              <h3 className="text-2xl font-semibold mb-6 text-gray-800">Shipping Address</h3>
+              <h3 className="text-2xl font-semibold mb-6 text-gray-900">Shipping Address</h3>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
                   <label className="block text-gray-700 font-medium">First name *</label>
@@ -169,7 +169,7 @@ const PaymentPage = () => {
                     placeholder="John"
                     value={shippingAddress.firstName}
                     onChange={handleShippingChange}
-                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -181,7 +181,7 @@ const PaymentPage = () => {
                     placeholder="Doe"
                     value={shippingAddress.lastName}
                     onChange={handleShippingChange}
-                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -194,7 +194,7 @@ const PaymentPage = () => {
                   placeholder="123 Main St"
                   value={shippingAddress.addressLine1}
                   onChange={handleShippingChange}
-                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -206,7 +206,7 @@ const PaymentPage = () => {
                   placeholder="Apt, suite, etc. (optional)"
                   value={shippingAddress.addressLine2}
                   onChange={handleShippingChange}
-                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4 mb-6">
@@ -218,7 +218,7 @@ const PaymentPage = () => {
                     placeholder="New York"
                     value={shippingAddress.city}
                     onChange={handleShippingChange}
-                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -230,7 +230,7 @@ const PaymentPage = () => {
                     placeholder="NY"
                     value={shippingAddress.state}
                     onChange={handleShippingChange}
-                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -244,7 +244,7 @@ const PaymentPage = () => {
                     placeholder="10001"
                     value={shippingAddress.zipCode}
                     onChange={handleShippingChange}
-                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -256,20 +256,20 @@ const PaymentPage = () => {
                     placeholder="United States"
                     value={shippingAddress.country}
                     onChange={handleShippingChange}
-                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full mt-1 p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
               </div>
               <div className="mb-6">
                 <label className="flex items-center text-gray-700">
-                  <input type="checkbox" className="mr-2" />
+                  <input type="checkbox" className="mr-2 text-blue-600" />
                   Use this address for payment details
                 </label>
               </div>
               <button
                 type="submit"
-                className="bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition duration-300"
+                className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 w-full"
               >
                 Next
               </button>
