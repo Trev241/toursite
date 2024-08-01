@@ -7,18 +7,18 @@ import org.springframework.stereotype.Service;
 
 import humber.ds.toursite.model.Coupon;
 import humber.ds.toursite.repository.CouponRepository;
+import humber.ds.toursite.service.BookingService;
 import humber.ds.toursite.service.CouponService;
-import humber.ds.toursite.service.PaymentService;
 
 @Service
 public class CouponServiceImp implements CouponService {
     CouponRepository couponRepository;
-    PaymentService paymentService;
+    BookingService bookingService;
 
     @Autowired
-    public CouponServiceImp(CouponRepository couponRepository, PaymentService paymentService) {
+    public CouponServiceImp(CouponRepository couponRepository, BookingService bookingService) {
         this.couponRepository = couponRepository;
-        this.paymentService = paymentService;
+        this.bookingService = bookingService;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CouponServiceImp implements CouponService {
     }
 
     @Override
-    public Coupon redeem(String code, Long paymentId) {
+    public Coupon redeem(String code, Long bookingId) {
         List<Coupon> coupons = couponRepository.findByCode(code);
         Coupon coupon = coupons.size() > 0 ? coupons.get(0) : null;
 
@@ -46,8 +46,8 @@ public class CouponServiceImp implements CouponService {
             throw new RuntimeException("Coupon is either invalid or has already been redeemed.");
 
         coupon.setRedeemed(true);
-        paymentService.applyPromotions(paymentId, coupon);
-        return coupon;
+        bookingService.applyPromotions(bookingId, coupon);
+        return couponRepository.save(coupon);
     }
 
     @Override
@@ -76,14 +76,14 @@ public class CouponServiceImp implements CouponService {
 
     public static class RedemptionRequest {
         private String code;
-        private Long paymentId;
+        private Long bookingId;
 
         public String getCode() {
             return code;
         }
 
-        public Long getPaymentId() {
-            return paymentId;
+        public Long getBookingId() {
+            return bookingId;
         }
     }
 }

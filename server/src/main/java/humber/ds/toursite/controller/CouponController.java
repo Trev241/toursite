@@ -29,7 +29,7 @@ public class CouponController {
 
     @PostMapping("/coupons/redeem")
     Coupon redeem(@RequestBody RedemptionRequest redemptionRequest) {
-        return couponService.redeem(redemptionRequest.getCode(), redemptionRequest.getPaymentId());
+        return couponService.redeem(redemptionRequest.getCode(), redemptionRequest.getBookingId());
     }
 
     @PostMapping("/coupons")

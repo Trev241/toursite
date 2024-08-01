@@ -15,7 +15,7 @@ public interface CouponService {
 
     Coupon replaceCoupon(Coupon newCoupon, Long id);
 
-    Coupon redeem(String code, Long paymentId);
+    Coupon redeem(String code, Long bookingId);
 
     void deleteCoupon(Long id);
 }

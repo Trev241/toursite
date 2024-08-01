@@ -1,7 +1,7 @@
 package humber.ds.toursite.model;
 
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -14,57 +14,41 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" }) // Handle lazy loading
 public class Payment {
     private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
-    private double total;
-    private double discount;
-    private double netTotal;
+    private double amount;
     private PaymentStatus status;
     private Date transactionTime;
+    private LocalDate requiredBy;
     private PaymentType paymentType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking.id")
     private Booking booking;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coupon.id")
-    private List<Coupon> coupons;
-
     public Payment() {
         this.status = PaymentStatus.PENDING;
     }
 
-    public Payment(double total, double discount, double netTotal, PaymentStatus status,
-            Date transactionTime, PaymentType paymentType, Booking booking, List<Coupon> coupons) {
-        this.total = total;
-        this.discount = discount;
-        this.netTotal = netTotal;
+    public Payment(double amount, PaymentStatus status,
+            Date transactionTime, LocalDate requiredBy, PaymentType paymentType, Booking booking) {
+        this.amount = amount;
         this.status = status;
         this.transactionTime = transactionTime;
         this.paymentType = paymentType;
         this.booking = booking;
-        this.coupons = coupons;
+        this.requiredBy = requiredBy;
     }
 
     public Long getId() {
         return id;
     }
 
-    public double getTotal() {
-        return total;
-    }
-
-    public double getDiscount() {
-        return discount;
-    }
-
-    public double getNetTotal() {
-        return netTotal;
+    public double getAmount() {
+        return amount;
     }
 
     public PaymentStatus getStatus() {
@@ -83,24 +67,16 @@ public class Payment {
         return booking;
     }
 
-    public List<Coupon> getCoupons() {
-        return coupons;
+    public LocalDate getRequiredBy() {
+        return requiredBy;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
-    public void setNetTotal(double netTotal) {
-        this.netTotal = netTotal;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public void setStatus(PaymentStatus status) {
@@ -117,5 +93,9 @@ public class Payment {
 
     public void setBooking(Booking booking) {
         this.booking = booking;
+    }
+
+    public void setRequiredBy(LocalDate requiredBy) {
+        this.requiredBy = requiredBy;
     }
 }

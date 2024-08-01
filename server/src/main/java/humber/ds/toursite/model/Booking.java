@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -19,29 +20,38 @@ public class Booking {
     private Long clientId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime booking_date;
+    private LocalDateTime bookingDate;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate check_in_date;
+    private LocalDate checkInDate;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate check_out_date;
+    private LocalDate checkOutDate;
     private BookingStatus status;
-    private double total_price;
+    private double totalPrice;
+    private double discount;
+    private double netTotal;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coupon.id")
+    private List<Coupon> coupons;
 
     public Booking() {
     }
 
-    public Booking(Long id, Long siteId, Long clientId, LocalDateTime booking_date,
-            LocalDate check_in_date, LocalDate check_out_date, BookingStatus status, double total_price) {
+    public Booking(Long id, Long siteId, Long clientId, LocalDateTime bookingDate,
+            LocalDate checkInDate, LocalDate checkOutDate, BookingStatus status, double totalPrice, double discount,
+            double netTotal) {
         this.id = id;
         this.siteId = siteId;
         this.clientId = clientId;
-        this.booking_date = booking_date;
-        this.check_in_date = check_in_date;
-        this.check_out_date = check_out_date;
+        this.bookingDate = bookingDate;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
         this.status = status;
-        this.total_price = total_price;
+        this.totalPrice = totalPrice;
+        this.discount = discount;
+        this.netTotal = netTotal;
     }
 
     public Long getId() {
@@ -68,28 +78,40 @@ public class Booking {
         this.clientId = clientId;
     }
 
-    public LocalDateTime getBooking_date() {
-        return booking_date;
+    public LocalDateTime getBookingDate() {
+        return bookingDate;
     }
 
-    public void setBooking_date(LocalDateTime booking_date) {
-        this.booking_date = booking_date;
+    public double getDiscount() {
+        return discount;
     }
 
-    public LocalDate getCheck_in_date() {
-        return check_in_date;
+    public double getNetTotal() {
+        return netTotal;
     }
 
-    public void setCheck_in_date(LocalDate check_in_date) {
-        this.check_in_date = check_in_date;
+    public void setBookingDate(LocalDateTime bookingDate) {
+        this.bookingDate = bookingDate;
     }
 
-    public LocalDate getCheck_out_date() {
-        return check_out_date;
+    public LocalDate getCheckInDate() {
+        return checkInDate;
     }
 
-    public void setCheck_out_date(LocalDate check_out_date) {
-        this.check_out_date = check_out_date;
+    public List<Coupon> getCoupons() {
+        return coupons;
+    }
+
+    public void setCheckInDate(LocalDate checkInDate) {
+        this.checkInDate = checkInDate;
+    }
+
+    public LocalDate getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public void setCheckOutDate(LocalDate checkOutDate) {
+        this.checkOutDate = checkOutDate;
     }
 
     public BookingStatus getStatus() {
@@ -100,11 +122,19 @@ public class Booking {
         this.status = status;
     }
 
-    public double getTotal_price() {
-        return total_price;
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setTotal_price(double total_price) {
-        this.total_price = total_price;
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public void setNetTotal(double netTotal) {
+        this.netTotal = netTotal;
     }
 }

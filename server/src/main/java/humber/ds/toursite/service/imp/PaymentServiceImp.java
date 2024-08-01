@@ -1,6 +1,6 @@
 package humber.ds.toursite.service.imp;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 
 import humber.ds.toursite.enums.PaymentStatus;
 import humber.ds.toursite.model.Booking;
-import humber.ds.toursite.model.Coupon;
 import humber.ds.toursite.model.Payment;
 import humber.ds.toursite.repository.PaymentRepository;
 import humber.ds.toursite.repository.BookingRepository;
 import humber.ds.toursite.service.PaymentService;
+import humber.ds.toursite.strategies.DepositStrategy;
+import humber.ds.toursite.strategies.PaymentMode;
+import humber.ds.toursite.strategies.PaymentStrategy;
+import humber.ds.toursite.strategies.UpfrontStrategy;
 
 @Service
 public class PaymentServiceImp implements PaymentService {
@@ -31,33 +34,29 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public Payment initiatePayment(PaymentRequest paymentRequest) {
+    public List<Payment> initiatePayment(PaymentRequest paymentRequest) {
         Booking booking = bookingRepository.findById(paymentRequest.getBookingId()).get();
-        paymentRepository.abortPaymentsForBooking(PaymentStatus.ABORTED, booking.getId());
+        PaymentStrategy paymentStrategy;
+        List<Payment> payments = new ArrayList<>();
 
-        Payment payment = new Payment();
-        payment.setBooking(booking);
-        payment.setTotal(booking.getTotal_price());
-        payment.setNetTotal(booking.getTotal_price());
-        payment.setStatus(PaymentStatus.PENDING);
-        payment.setTransactionTime(new Date());
+        switch (paymentRequest.getPaymentMode()) {
+            case DEPOSIT:
+                paymentStrategy = new DepositStrategy();
+                payments = paymentStrategy.execute(booking);
+                break;
+            case UPFRONT:
+            default:
+                paymentStrategy = new UpfrontStrategy();
+                payments = paymentStrategy.execute(booking);
+                break;
+        }
 
-        return paymentRepository.save(payment);
-    }
+        for (Payment payment : payments) {
+            payment.setBooking(booking);
+            paymentRepository.save(payment);
+        }
 
-    @Override
-    public Payment applyPromotions(Long id, Coupon coupon) {
-        Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
-        payment.getCoupons().add(coupon);
-
-        double total = payment.getTotal();
-        double discount = (total * coupon.getDiscountRate() / 100) + coupon.getFlatDiscount();
-        double netTotal = total - discount;
-        payment.setDiscount(discount);
-        payment.setNetTotal(netTotal);
-
-        return paymentRepository.save(payment);
+        return payments;
     }
 
     @Override
@@ -83,9 +82,7 @@ public class PaymentServiceImp implements PaymentService {
     @Override
     public Payment replacePayment(Payment newPayment, Long id) {
         return paymentRepository.findById(id).map(payment -> {
-            payment.setTotal(newPayment.getTotal());
-            payment.setDiscount(newPayment.getDiscount());
-            payment.setNetTotal(newPayment.getNetTotal());
+            payment.setAmount(newPayment.getAmount());
             payment.setTransactionTime(newPayment.getTransactionTime());
             payment.setStatus(newPayment.getStatus());
             payment.setBooking(newPayment.getBooking());
@@ -103,9 +100,14 @@ public class PaymentServiceImp implements PaymentService {
 
     public static class PaymentRequest {
         private Long bookingId;
+        private PaymentMode paymentMode;
 
         public Long getBookingId() {
             return bookingId;
+        }
+
+        public PaymentMode getPaymentMode() {
+            return paymentMode;
         }
     }
 

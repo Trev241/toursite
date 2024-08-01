@@ -34,7 +34,7 @@ public class PaymentController {
     }
 
     @PostMapping("/payments/initiate")
-    Payment initiatePayment(@RequestBody PaymentRequest paymentRequest) {
+    List<Payment> initiatePayment(@RequestBody PaymentRequest paymentRequest) {
         return paymentService.initiatePayment(paymentRequest);
     }
 

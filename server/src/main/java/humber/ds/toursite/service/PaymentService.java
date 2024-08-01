@@ -3,7 +3,6 @@ package humber.ds.toursite.service;
 import java.util.List;
 
 import humber.ds.toursite.model.Booking;
-import humber.ds.toursite.model.Coupon;
 import humber.ds.toursite.model.Payment;
 import humber.ds.toursite.service.imp.PaymentServiceImp.PaymentRequest;
 
@@ -16,9 +15,7 @@ public interface PaymentService {
 
     Payment replacePayment(Payment payment, Long id);
 
-    Payment initiatePayment(PaymentRequest paymentRequest);
-
-    Payment applyPromotions(Long id, Coupon coupon);
+    List<Payment> initiatePayment(PaymentRequest paymentRequest);
 
     Payment checkout(Long id);
 

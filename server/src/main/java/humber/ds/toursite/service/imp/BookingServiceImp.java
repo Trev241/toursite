@@ -3,6 +3,7 @@ package humber.ds.toursite.service.imp;
 import humber.ds.toursite.enums.BookingStatus;
 import humber.ds.toursite.model.Booking;
 import humber.ds.toursite.model.Client;
+import humber.ds.toursite.model.Coupon;
 import humber.ds.toursite.model.Site;
 import humber.ds.toursite.repository.BookingRepository;
 import humber.ds.toursite.repository.ClientRepository;
@@ -47,13 +48,30 @@ public class BookingServiceImp implements BookingService {
         Booking booking = new Booking();
         booking.setClientId(clientId);
         booking.setSiteId(siteId);
-        booking.setCheck_in_date(checkInDate);
-        booking.setCheck_out_date(checkOutDate);
+        booking.setCheckInDate(checkInDate);
+        booking.setCheckOutDate(checkOutDate);
         booking.setStatus(bookingStatus);
-        booking.setBooking_date(LocalDateTime.now());
+        booking.setBookingDate(LocalDateTime.now());
 
         int nights = (int) ChronoUnit.DAYS.between(checkInDate, checkOutDate);
-        booking.setTotal_price(calculateTotalPrice(site.getPrice(), nights));
+        booking.setTotalPrice(calculateTotalPrice(site.getPrice(), nights));
+        booking.setNetTotal(booking.getTotalPrice());
+        booking.setDiscount(0);
+
+        return bookingRepository.save(booking);
+    }
+
+    @Override
+    public Booking applyPromotions(Long id, Coupon coupon) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Could not find booking"));
+        booking.getCoupons().add(coupon);
+
+        double total = booking.getTotalPrice();
+        double discount = (total * coupon.getDiscountRate() / 100) + coupon.getFlatDiscount();
+        // Include previous discounts, if any
+        booking.setDiscount(booking.getDiscount() + discount);
+        booking.setNetTotal(total - booking.getDiscount());
 
         return bookingRepository.save(booking);
     }
@@ -73,7 +91,7 @@ public class BookingServiceImp implements BookingService {
 
         List<Booking> waitingBookings = bookingRepository.findBySiteIdAndStatus(booking.getSiteId(),
                 BookingStatus.PENDING);
-        notifyClients(waitingBookings, booking.getCheck_in_date(), booking.getCheck_out_date());
+        notifyClients(waitingBookings, booking.getCheckInDate(), booking.getCheckOutDate());
     }
 
     @Override
@@ -88,8 +106,8 @@ public class BookingServiceImp implements BookingService {
     private boolean checkAvailability(Long siteId, LocalDate checkInDate, LocalDate checkOutDate) {
         List<Booking> bookings = bookingRepository.findBySiteIdAndStatus(siteId, BookingStatus.CONFIRMED);
 
-        return bookings.stream().noneMatch(booking -> (checkInDate.isBefore(booking.getCheck_out_date())
-                && checkOutDate.isAfter(booking.getCheck_in_date())));
+        return bookings.stream().noneMatch(booking -> (checkInDate.isBefore(booking.getCheckOutDate())
+                && checkOutDate.isAfter(booking.getCheckInDate())));
     }
 
     private void notifyClients(List<Booking> bookings, LocalDate canceledCheckIn, LocalDate canceledCheckOut) {
@@ -97,7 +115,7 @@ public class BookingServiceImp implements BookingService {
         for (Booking booking : bookings) {
 
             if (datesOverlap(canceledCheckIn, canceledCheckOut,
-                    booking.getCheck_in_date(), booking.getCheck_out_date())
+                    booking.getCheckInDate(), booking.getCheckOutDate())
                     && !notifiedClients.containsKey(booking.getClientId())) {
 
                 Client client = clientRepository.findById(booking.getClientId())

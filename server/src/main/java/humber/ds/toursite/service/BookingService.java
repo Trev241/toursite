@@ -1,6 +1,7 @@
 package humber.ds.toursite.service;
 
 import humber.ds.toursite.model.Booking;
+import humber.ds.toursite.model.Coupon;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,4 +14,6 @@ public interface BookingService {
     void cancelBooking(Long id);
 
     List<Booking> getBookingsByClientID(Long clientId);
+
+    Booking applyPromotions(Long id, Coupon coupon);
 }
