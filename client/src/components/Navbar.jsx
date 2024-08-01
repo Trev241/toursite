@@ -43,7 +43,7 @@ function Navbar({ onAuthModalToggle, username, onLogout }) {
         {username && (
           <div className='relative'>
             <div className='cursor-pointer' onClick={toggleDropdown}>
-              <h2 className='text-sm'>{clientId}</h2>
+              <h2 className='text-sm'>{username}</h2>
             </div>
             {dropdownOpen && (
               <div className='absolute top-full right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg p-4'>
