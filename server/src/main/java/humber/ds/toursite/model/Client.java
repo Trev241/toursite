@@ -14,8 +14,8 @@ public class Client {
     private Long id;
     private String email;
     private String username;
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String password;
     private String avatarUrl;
     private String phone;
@@ -44,15 +44,23 @@ public class Client {
     public String getEmail() {
         return email;
     }
-    public String getfirst_name(){
-        return first_name;
+
+    public String getFirstName() {
+        return firstName;
     }
-    public String getlast_name(){
-        return last_name;
+
+    public String getLastName() {
+        return lastName;
     }
-    public void setfirst_name(String first_name){
-        this.first_name=first_name;
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }

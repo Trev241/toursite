@@ -13,4 +13,8 @@ public interface BookingService {
     void cancelBooking(Long id);
 
     List<Booking> getBookingsByClientID(Long clientId);
+
+    List<Booking> getPendingBooking(Long siteId);
+
+    List<Booking> getProcessingBooking(Long siteId);
 }
