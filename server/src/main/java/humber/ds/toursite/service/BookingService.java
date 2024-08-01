@@ -16,4 +16,8 @@ public interface BookingService {
     List<Booking> getBookingsByClientID(Long clientId);
 
     Booking applyPromotions(Long id, Coupon coupon);
+
+    List<Booking> getPendingBooking(Long siteId);
+
+    List<Booking> getProcessingBooking(Long siteId);
 }

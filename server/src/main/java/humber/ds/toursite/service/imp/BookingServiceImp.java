@@ -99,6 +99,16 @@ public class BookingServiceImp implements BookingService {
         return bookingRepository.findByClientId(clientId);
     }
 
+    @Override
+    public List<Booking> getPendingBooking(Long siteId) {
+        return bookingRepository.findBySiteIdAndStatus(siteId, BookingStatus.PENDING);
+    }
+
+    @Override
+    public List<Booking> getProcessingBooking(Long siteId) {
+        return bookingRepository.findBySiteIdAndStatus(siteId, BookingStatus.PROCESSING);
+    }
+
     private double calculateTotalPrice(double pricePerNight, int nights) {
         return pricePerNight * nights;
     }
