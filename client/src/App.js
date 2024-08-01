@@ -16,6 +16,7 @@ import BookingPage from "./components/BookingPage";
 import PaymentPage from "./components/PaymentPage";
 import Profile from "./components/Profile"; // Import Profile
 import SignIn from "./pages/Signin";
+import { AuthContext } from "./components/AuthProvider";
 
 function App() {
   const { clientId, setClientId } = useContext(AuthContext); // setting the client id
