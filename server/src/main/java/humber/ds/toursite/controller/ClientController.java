@@ -3,6 +3,8 @@ package humber.ds.toursite.controller;
 import java.util.List;
 
 import humber.ds.toursite.service.ClientService;
+import humber.ds.toursite.service.imp.ClientServiceImp.ClientCredentials;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,24 +36,14 @@ public class ClientController {
     }
 
     @PostMapping("/clients/register")
-    ResponseEntity<Client> registerClient(@RequestBody Client newClient) {
-        HttpStatus status;
-        if (clientService.findByEmail(newClient.getEmail()).size() > 0) {
-            status = HttpStatus.BAD_REQUEST;
-        } else {
-            status = HttpStatus.OK;
-            clientService.saveClient(newClient);
-        }
-
-        return new ResponseEntity<>(newClient, status);
+    Client registerClient(@RequestBody Client newClient) {
+        return clientService.register(newClient);
     }
 
     @PostMapping("/clients/signin")
-    ResponseEntity<Client> signinClient(@RequestBody Client credentials) {
-        Client client = clientService.findByEmail(credentials.getEmail()).get(0);
-        HttpStatus status = (client != null && client.getPassword().equals(credentials.getPassword()))
-                ? HttpStatus.OK
-                : HttpStatus.FORBIDDEN;
+    ResponseEntity<Client> signinClient(@RequestBody ClientCredentials clientCredentials) {
+        Client client = clientService.signin(clientCredentials);
+        HttpStatus status = client != null ? HttpStatus.OK : HttpStatus.FORBIDDEN;
 
         return new ResponseEntity<>(client, status);
     }

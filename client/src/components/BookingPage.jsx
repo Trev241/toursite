@@ -1,15 +1,33 @@
-import React, { useState } from "react";
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 const BookingPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { place } = location.state || {};
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [guests, setGuests] = useState(1);
+  const [availableDates, setAvailableDates] = useState([]);
+
+  useEffect(() => {
+    // For testing purposes, we will hardcode the available dates
+    const testDates = [
+      "2024-08-01",
+      "2024-08-02",
+      "2024-08-03",
+      "2024-08-04",
+      "2024-08-05",
+      "2024-08-06"
+    ];
+
+    // Convert the list of date strings to Date objects
+    const dates = testDates.map(dateString => new Date(dateString));
+    setAvailableDates(dates);
+  }, []);
 
   const handleDateChange = (dates) => {
     const [start, end] = dates;
@@ -22,11 +40,18 @@ const BookingPage = () => {
   };
 
   const addToCart = () => {
-    // Implement Book now logic
+    // Redirect to the PaymentPage
+    navigate('/payment');
   };
 
   const addToWishlist = () => {
     // Implement add to wishlist logic
+  };
+
+  const isAvailableDate = (date) => {
+    return availableDates.some(availableDate =>
+      date.toDateString() === availableDate.toDateString()
+    );
   };
 
   if (!place) {
@@ -34,14 +59,14 @@ const BookingPage = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
+    <div className="container mx-auto p-4 max-w-6xl">
       <div className="grid grid-rows-1 gap-4">
         {/* Top Row: Image with Heart Icon */}
-        <div className="relative w-[400px] mx-auto">
-          <img src={place.img} alt={place.title} className="w-full h-auto object-cover" />
+        <div className="relative w-full max-w-full mx-auto">
+          <img src={place.img} alt={place.title} className="w-full h-auto object-cover rounded-lg shadow-lg" />
           <button 
             onClick={addToWishlist} 
-            className="absolute top-2 right-2 p-1 rounded-full bg-white bg-opacity-50"
+            className="absolute top-2 right-2 p-1 rounded-full bg-white bg-opacity-50 hover:bg-opacity-75 transition"
             style={{ border: 'none', outline: 'none' }}
           >
             <FaHeart size={24} className="text-red-500" />
@@ -49,20 +74,20 @@ const BookingPage = () => {
         </div>
 
         {/* Content and Booking Options */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Content Column */}
           <div className="md:col-span-1">
-            <h1 className="text-2xl font-bold my-4">{place.title}</h1>
+            <h1 className="text-3xl font-bold my-4">{place.title}</h1>
             <p className="text-gray-700">{place.description}</p>
           </div>
 
           {/* Booking Options Column */}
           <div className="md:col-span-1">
-            <div className="bg-white p-4 shadow-lg rounded-lg">
-              <h2 className="text-lg font-semibold mb-4">Book Your Trip</h2>
-              <div className="mb-4">
+            <div className="bg-white p-6 shadow-lg rounded-lg">
+              <h2 className="text-xl font-semibold mb-6">Book Your Trip</h2>
+              <div className="mb-6">
                 {/* Styled Date Range Picker */}
-                <div className="bg-white p-4 shadow rounded-lg border border-gray-200">
+                <div className="bg-white p-4 shadow rounded-lg border border-gray-200 w-full">
                   <label className="block text-gray-700 mb-2 text-lg font-medium">Select Dates:</label>
                   <DatePicker
                     selected={startDate}
@@ -72,13 +97,14 @@ const BookingPage = () => {
                     selectsRange
                     inline
                     dateFormat="yyyy/MM/dd"
-                    className="react-datepicker-wrapper"
-                    calendarClassName="react-datepicker-calendar"
+                    className="w-full"
+                    calendarClassName="w-full"
                     popperClassName="react-datepicker-popper"
+                    filterDate={isAvailableDate}
                   />
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="mb-6">
                 {/* Guests Input */}
                 <div className="flex items-center justify-between">
                   <label className="block text-gray-700">Number of Guests:</label>
@@ -86,18 +112,18 @@ const BookingPage = () => {
                     type="number"
                     value={guests}
                     onChange={handleGuestsChange}
-                    className="w-full mt-2 p-2 border rounded"
+                    className="w-24 mt-2 p-2 border rounded"
                     min="1"
                   />
                 </div>
               </div>
-              {/* Move Book now Button Below */}
+              {/* Move Add to Cart Button Below */}
               <div className="mb-4">
                 <button
-                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full"
+                  className="bg-blue-600 text-white py-3 px-6 rounded hover:bg-blue-700 w-full transition"
                   onClick={addToCart}
                 >
-                  Book now
+                  Add to Cart
                 </button>
               </div>
             </div>

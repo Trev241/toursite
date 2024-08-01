@@ -1,19 +1,15 @@
-// Navbar.jsx
-
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { BsPerson } from 'react-icons/bs';
 import { BiSearch } from 'react-icons/bi';
 import { AiOutlineClose } from 'react-icons/ai';
 import { HiOutlineMenuAlt4 } from 'react-icons/hi'; 
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
-import { Link } from 'react-router-dom'; // Import Link
-import { AuthContext } from "./AuthProvider";
 
-function Navbar({ onAuthModalToggle, username, onLogout }) {
+function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
   const [nav, setNav] = useState(false);
   const [logo, setLogo] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const {clientId,setClientId}= useContext(AuthContext);// setting the client id 
+
   const handleNav = () => {
     setNav(!nav);
     setLogo(!logo);
@@ -24,7 +20,7 @@ function Navbar({ onAuthModalToggle, username, onLogout }) {
   };
 
   return (
-    <div className='flex w-full justify-between items-center h-20 px-4 absolute z-10 text-white'>
+    <div className={`flex w-full justify-between items-center h-20 px-4 ${isHeader ? '' : 'absolute z-10'} ${isHeader ? 'text-black' : 'text-white'}`}>
       <div className='flex items-center'>
         <h1 onClick={handleNav} className={logo ? 'hidden' : 'block'}>TOURSITE.</h1>
         <ul className='hidden md:flex ml-10'>
@@ -53,7 +49,7 @@ function Navbar({ onAuthModalToggle, username, onLogout }) {
                   className='w-12 h-12 rounded-full mx-auto mb-2'
                 />
                 <div className='flex flex-col items-center'>
-                  <Link to="/profile" className='text-blue-500 hover:underline mb-2'>View Profile</Link>
+                  <a href="/profile" className='text-blue-500 hover:underline mb-2'>View Profile</a>
                   <button 
                     onClick={() => {
                       onLogout(); // Call the logout function
@@ -97,4 +93,4 @@ function Navbar({ onAuthModalToggle, username, onLogout }) {
   );
 }
 
-export default Navbar;
+export default NavbarPages;

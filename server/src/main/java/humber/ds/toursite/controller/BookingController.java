@@ -4,7 +4,6 @@ import humber.ds.toursite.model.Booking;
 import humber.ds.toursite.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;

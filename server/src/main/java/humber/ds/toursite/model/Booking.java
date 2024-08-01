@@ -1,6 +1,8 @@
 package humber.ds.toursite.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import humber.ds.toursite.enums.BookingStatus;
 import jakarta.persistence.*;
 
@@ -8,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,10 +29,11 @@ public class Booking {
     private BookingStatus status;
     private double total_price;
 
-    public Booking() {}
+    public Booking() {
+    }
 
     public Booking(Long id, Long siteId, Long clientId, LocalDateTime booking_date,
-                   LocalDate check_in_date, LocalDate check_out_date, BookingStatus status, double total_price) {
+            LocalDate check_in_date, LocalDate check_out_date, BookingStatus status, double total_price) {
         this.id = id;
         this.siteId = siteId;
         this.clientId = clientId;
