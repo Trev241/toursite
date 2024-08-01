@@ -1,6 +1,6 @@
 // App.js
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import NavbarPages from './components/NavbarPages'; // Import NavbarPages
@@ -12,6 +12,7 @@ import PaymentPage from './components/PaymentPage';
 import Profile from './components/Profile'; // Import Profile
 
 function App() {
+  const {clientId,setClientId}= useContext(AuthContext);// setting the client id 
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [email, setEmail] = useState(null); // Store email instead of username
 

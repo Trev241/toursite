@@ -9,6 +9,7 @@ function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
   const [nav, setNav] = useState(false);
   const [logo, setLogo] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const {clientId,setClientId}= useContext(AuthContext);// setting the client id 
 
   const handleNav = () => {
     setNav(!nav);
@@ -39,7 +40,7 @@ function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
         {username && (
           <div className='relative'>
             <div className='cursor-pointer' onClick={toggleDropdown}>
-              <h2 className='text-sm'>{username}</h2>
+              <h2 className='text-sm'>{clientId}</h2>
             </div>
             {dropdownOpen && (
               <div className='absolute top-full right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg p-4'>

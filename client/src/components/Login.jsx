@@ -21,7 +21,7 @@ const Login = ({ onClose, onSwitchToSignUp, onLoginSuccess }) => {
     e.stopPropagation();
     try {
       const url = isAdmin
-        ? "http://localhost:8081/api/v1/admins/signin"
+        ? "http://localhost:8081/api/v1/clients/signin"
         : "http://localhost:8081/api/v1/clients/signin";
 
       const response = await fetch(url, {
