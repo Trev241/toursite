@@ -63,6 +63,8 @@ public class ClientServiceImp implements ClientService {
                 client -> {
                     client.setEmail(newClient.getEmail());
                     client.setUsername(newClient.getUsername());
+                    client.setFirstName(newClient.getFirstName());
+                    client.setLastName(newClient.getLastName());
                     client.setPassword(newClient.getPassword());
                     client.setAvatarUrl(newClient.getAvatarUrl());
                     client.setPhone(newClient.getPhone());
