@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import humber.ds.toursite.enums.BookingStatus;
 import humber.ds.toursite.enums.PaymentStatus;
+import humber.ds.toursite.exceptions.PaymentAlreadyInitiatedException;
 import humber.ds.toursite.model.Booking;
 import humber.ds.toursite.model.Payment;
 import humber.ds.toursite.repository.PaymentRepository;
@@ -39,6 +41,9 @@ public class PaymentServiceImp implements PaymentService {
         PaymentStrategy paymentStrategy;
         List<Payment> payments = new ArrayList<>();
 
+        if (booking.getStatus() != BookingStatus.PROCESSING)
+            throw new PaymentAlreadyInitiatedException();
+
         switch (paymentRequest.getPaymentMode()) {
             case DEPOSIT:
                 paymentStrategy = new DepositStrategy();
@@ -51,10 +56,15 @@ public class PaymentServiceImp implements PaymentService {
                 break;
         }
 
+        // Save all payments
         for (Payment payment : payments) {
             payment.setBooking(booking);
             paymentRepository.save(payment);
         }
+
+        // Confirm booking
+        booking.setStatus(BookingStatus.CONFIRMED);
+        bookingRepository.save(booking);
 
         return payments;
     }

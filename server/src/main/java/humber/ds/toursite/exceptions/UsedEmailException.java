@@ -3,7 +3,7 @@ package humber.ds.toursite.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No such Client")
-public class ClientNotFoundException extends RuntimeException {
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Email already in use")
+public class UsedEmailException extends RuntimeException {
 
 }

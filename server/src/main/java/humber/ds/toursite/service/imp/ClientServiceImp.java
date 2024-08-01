@@ -2,6 +2,7 @@ package humber.ds.toursite.service.imp;
 
 import humber.ds.toursite.model.Client;
 import humber.ds.toursite.exceptions.ClientNotFoundException;
+import humber.ds.toursite.exceptions.UsedEmailException;
 import humber.ds.toursite.repository.ClientRepository;
 import humber.ds.toursite.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class ClientServiceImp implements ClientService {
         List<Client> clientsWithEmail = clientRepository.findByEmail(client.getEmail());
 
         if (!clientsWithEmail.isEmpty())
-            throw new RuntimeException("Email is already in use");
+            throw new UsedEmailException();
 
         return clientRepository.save(client);
     }
