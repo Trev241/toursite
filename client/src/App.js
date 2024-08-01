@@ -1,3 +1,5 @@
+// App.js
+
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -7,6 +9,7 @@ import Places from './components/destinations/Places';
 import AuthModal from './components/AuthModal';
 import BookingPage from './components/BookingPage';
 import PaymentPage from './components/PaymentPage';
+import Profile from './components/Profile'; // Import Profile
 
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -42,6 +45,7 @@ function App() {
             <Route path="/" element={<><Hero /><Places /></>} />
             <Route path="/booking" element={<BookingPage />} />
             <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/profile" element={<Profile />} /> {/* Add this line */}
           </Routes>
         </div>
         {showAuthModal && (

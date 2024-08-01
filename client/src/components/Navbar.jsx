@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+// Navbar.jsx
+
+import React, { useContext, useState } from 'react';
 import { BsPerson } from 'react-icons/bs';
 import { BiSearch } from 'react-icons/bi';
 import { AiOutlineClose } from 'react-icons/ai';
 import { HiOutlineMenuAlt4 } from 'react-icons/hi'; 
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { Link } from 'react-router-dom'; // Import Link
+import { AuthContext } from "./AuthProvider";
 
 function Navbar({ onAuthModalToggle, username, onLogout }) {
   const [nav, setNav] = useState(false);
   const [logo, setLogo] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const {clientId,setClientId}= useContext(AuthContext);// setting the client id 
   const handleNav = () => {
     setNav(!nav);
     setLogo(!logo);
@@ -39,7 +43,7 @@ function Navbar({ onAuthModalToggle, username, onLogout }) {
         {username && (
           <div className='relative'>
             <div className='cursor-pointer' onClick={toggleDropdown}>
-              <h2 className='text-sm'>{username}</h2>
+              <h2 className='text-sm'>{clientId}</h2>
             </div>
             {dropdownOpen && (
               <div className='absolute top-full right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg p-4'>
@@ -49,7 +53,7 @@ function Navbar({ onAuthModalToggle, username, onLogout }) {
                   className='w-12 h-12 rounded-full mx-auto mb-2'
                 />
                 <div className='flex flex-col items-center'>
-                  <a href="/profile" className='text-blue-500 hover:underline mb-2'>View Profile</a>
+                  <Link to="/profile" className='text-blue-500 hover:underline mb-2'>View Profile</Link>
                   <button 
                     onClick={() => {
                       onLogout(); // Call the logout function
