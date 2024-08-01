@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import NavbarPages from './components/NavbarPages'; // Import NavbarPages
+import NavbarPages from './components/NavbarPages'; // Import NavbarPages 
 import Hero from './components/Hero';
 import Places from './components/destinations/Places';
 import AuthModal from './components/AuthModal';
