@@ -1,6 +1,7 @@
 package humber.ds.toursite.service.imp;
 
 import humber.ds.toursite.enums.BookingStatus;
+import humber.ds.toursite.exceptions.BookingNotFoundException;
 import humber.ds.toursite.model.Booking;
 import humber.ds.toursite.model.Client;
 import humber.ds.toursite.model.Coupon;
@@ -32,6 +33,12 @@ public class BookingServiceImp implements BookingService {
         this.bookingRepository = bookingRepository;
         this.clientRepository = clientRepository;
         this.siteRepository = siteRepository;
+    }
+
+    @Override
+    public Booking one(Long id) {
+        return bookingRepository.findById(id)
+                .orElseThrow(() -> new BookingNotFoundException());
     }
 
     @Override

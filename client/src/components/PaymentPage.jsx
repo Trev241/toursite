@@ -1,26 +1,55 @@
-import React, { useState } from 'react';
-import { FaCcVisa, FaCcMastercard, FaCcAmex, FaArrowLeft } from 'react-icons/fa'; // Importing icons
+import React, { useEffect, useState } from "react";
+import {
+  FaCcVisa,
+  FaCcMastercard,
+  FaCcAmex,
+  FaArrowLeft,
+} from "react-icons/fa"; // Importing icons
+import { useSearchParams } from "react-router-dom";
+import { API_BASE_URL } from "../constants/Constants";
 
 const PaymentPage = () => {
+  const [searchParams] = useSearchParams();
+
   const [shippingAddress, setShippingAddress] = useState({
-    firstName: '',
-    lastName: '',
-    addressLine1: '',
-    addressLine2: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: '',
+    firstName: "",
+    lastName: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "",
   });
 
   const [creditCard, setCreditCard] = useState({
-    cardNumber: '',
-    cardName: '',
-    expiryDate: '',
-    cvv: '',
+    cardNumber: "",
+    cardName: "",
+    expiryDate: "",
+    cvv: "",
   });
 
+  const [booking, setBooking] = useState();
+  const [couponCode, setCouponCode] = useState();
+  const [couponResponse, setCouponResponse] = useState();
+
   const [showCreditCard, setShowCreditCard] = useState(false); // State to toggle Credit Card Details
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const bookingId = searchParams.get("bookingId");
+        const url = new URL(`${API_BASE_URL}/bookings/${bookingId}`);
+
+        const response = await fetch(url);
+        const booking = await response.json();
+        setBooking(booking);
+        console.log(booking);
+      } catch (err) {
+        alert(err);
+      }
+    })();
+  }, [searchParams, couponResponse]);
 
   const handleShippingChange = (e) => {
     const { name, value } = e.target;
@@ -41,7 +70,36 @@ const PaymentPage = () => {
     setShowCreditCard(false); // Show Shipping Address section on clicking Back
   };
 
-  return (
+  const redeemCoupon = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/coupons/redeem`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          code: couponCode,
+          bookingId: booking.id,
+        }),
+      });
+
+      const couponResponse = await response.json();
+      console.log(couponResponse);
+      setCouponResponse(couponResponse);
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  const confirmPayment = async () => {
+    try {
+      fetch(`${API_BASE_URL}/payments/initiate`);
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  return booking ? (
     <div className="container mx-auto p-6 max-w-5xl">
       <div className="flex flex-col items-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900">Payment</h1>
@@ -49,34 +107,43 @@ const PaymentPage = () => {
       <div className="flex gap-8">
         {/* Back Arrow */}
         {showCreditCard && (
-          <div className="absolute top-4 left-4 cursor-pointer text-blue-600" onClick={handleBack}>
+          <div
+            className="absolute top-4 left-4 cursor-pointer text-blue-600"
+            onClick={handleBack}
+          >
             <FaArrowLeft className="text-2xl" />
           </div>
         )}
 
         {/* Left Section: Order Summary */}
         <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md border border-gray-300">
-          <h2 className="text-3xl font-extrabold mb-6 text-gray-900">Order Summary</h2>
+          <h2 className="text-3xl font-extrabold mb-6 text-gray-900">
+            Order Summary
+          </h2>
           <div className="bg-gray-100 p-5 rounded-lg shadow-inner mb-8">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Total $134.98</h3>
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Total ${booking.totalPrice}
+            </h3>
+            <h3>Promotions and Discounts</h3>
             <ul className="space-y-4">
-              <li className="flex justify-between text-gray-700">
-                <span className="font-medium">Tourism Plan</span>
-                <span className="font-semibold">$15.00</span>
-              </li>
-              <li className="flex justify-between text-gray-700">
-                <span className="font-medium">HST TAX%</span>
-                <span className="font-semibold">Free</span>
-              </li>
-              <li className="flex justify-between text-gray-700">
-                <span className="font-medium">Service Charges</span>
-                <span className="font-semibold">$69.99</span>
-              </li>
-              <li className="flex justify-between text-gray-700">
-                <span className="font-medium">Other Fees</span>
-                <span className="font-semibold">$49.99</span>
-              </li>
+              {booking.coupons.map((coupon) => (
+                <li className="justify-between text-gray-700">
+                  <p className="font-medium">Code: {coupon.code}</p>
+                  <p className="font-medium">
+                    {coupon.discountRate}% off:{" "}
+                    <b>-{(booking.totalPrice * coupon.discountRate) / 100}</b>
+                  </p>
+                  <p className="font-medium">
+                    Flat Discount: -{coupon.flatDiscount}
+                  </p>
+                </li>
+              ))}
+              <h3>Subtotal: {booking.discount}</h3>
             </ul>
+            <h1>Summary</h1>
+            <h2>Total: ${booking.totalPrice}</h2>
+            <h2>Discount(s) applied: ${booking.discount}</h2>
+            <h2>Net total: ${booking.netTotal}</h2>
           </div>
         </div>
 
@@ -84,9 +151,13 @@ const PaymentPage = () => {
         <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md border border-gray-300">
           {showCreditCard ? (
             <>
-              <h3 className="text-2xl font-semibold mb-6 text-gray-900">Credit Card Details</h3>
+              <h3 className="text-2xl font-semibold mb-6 text-gray-900">
+                Credit Card Details
+              </h3>
               <div className="mb-4">
-                <label className="block text-gray-700 font-medium">Card Number *</label>
+                <label className="block text-gray-700 font-medium">
+                  Card Number *
+                </label>
                 <input
                   type="text"
                   name="cardNumber"
@@ -99,7 +170,9 @@ const PaymentPage = () => {
               </div>
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-gray-700 font-medium">Cardholder Name *</label>
+                  <label className="block text-gray-700 font-medium">
+                    Cardholder Name *
+                  </label>
                   <input
                     type="text"
                     name="cardName"
@@ -111,7 +184,9 @@ const PaymentPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-medium">Expiry Date *</label>
+                  <label className="block text-gray-700 font-medium">
+                    Expiry Date *
+                  </label>
                   <input
                     type="text"
                     name="expiryDate"
@@ -144,9 +219,13 @@ const PaymentPage = () => {
                 <input
                   type="text"
                   placeholder="Coupon Code"
+                  onChange={(e) => setCouponCode(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <button className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">
+                <button
+                  onClick={redeemCoupon}
+                  className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
+                >
                   REDEEM
                 </button>
               </div>
@@ -159,10 +238,14 @@ const PaymentPage = () => {
             </>
           ) : (
             <form onSubmit={handleSubmit}>
-              <h3 className="text-2xl font-semibold mb-6 text-gray-900">Shipping Address</h3>
+              <h3 className="text-2xl font-semibold mb-6 text-gray-900">
+                Shipping Address
+              </h3>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-gray-700 font-medium">First name *</label>
+                  <label className="block text-gray-700 font-medium">
+                    First name *
+                  </label>
                   <input
                     type="text"
                     name="firstName"
@@ -174,7 +257,9 @@ const PaymentPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-medium">Last name *</label>
+                  <label className="block text-gray-700 font-medium">
+                    Last name *
+                  </label>
                   <input
                     type="text"
                     name="lastName"
@@ -187,7 +272,9 @@ const PaymentPage = () => {
                 </div>
               </div>
               <div className="mb-6">
-                <label className="block text-gray-700 font-medium">Address line 1 *</label>
+                <label className="block text-gray-700 font-medium">
+                  Address line 1 *
+                </label>
                 <input
                   type="text"
                   name="addressLine1"
@@ -199,7 +286,9 @@ const PaymentPage = () => {
                 />
               </div>
               <div className="mb-6">
-                <label className="block text-gray-700 font-medium">Address line 2</label>
+                <label className="block text-gray-700 font-medium">
+                  Address line 2
+                </label>
                 <input
                   type="text"
                   name="addressLine2"
@@ -211,7 +300,9 @@ const PaymentPage = () => {
               </div>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-gray-700 font-medium">City *</label>
+                  <label className="block text-gray-700 font-medium">
+                    City *
+                  </label>
                   <input
                     type="text"
                     name="city"
@@ -223,7 +314,9 @@ const PaymentPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-medium">State *</label>
+                  <label className="block text-gray-700 font-medium">
+                    State *
+                  </label>
                   <input
                     type="text"
                     name="state"
@@ -237,7 +330,9 @@ const PaymentPage = () => {
               </div>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-gray-700 font-medium">Zip / Postal code *</label>
+                  <label className="block text-gray-700 font-medium">
+                    Zip / Postal code *
+                  </label>
                   <input
                     type="text"
                     name="zipCode"
@@ -249,7 +344,9 @@ const PaymentPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-700 font-medium">Country *</label>
+                  <label className="block text-gray-700 font-medium">
+                    Country *
+                  </label>
                   <input
                     type="text"
                     name="country"
@@ -278,6 +375,8 @@ const PaymentPage = () => {
         </div>
       </div>
     </div>
+  ) : (
+    <>No booking found</>
   );
 };
 

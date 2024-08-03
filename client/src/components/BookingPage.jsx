@@ -1,33 +1,59 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from 'react-router-dom';
-import { FaHeart } from 'react-icons/fa';
-import DatePicker from 'react-datepicker';
+import React, { useState, useEffect, useContext } from "react";
+import {
+  createSearchParams,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
+import { FaHeart } from "react-icons/fa";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { API_BASE_URL } from "../constants/Constants";
+import { AuthContext } from "./AuthProvider";
 
 const BookingPage = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { place } = location.state || {};
+  const { clientId, setClientId } = useContext(AuthContext);
+
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [guests, setGuests] = useState(1);
   const [availableDates, setAvailableDates] = useState([]);
+  const [site, setSite] = useState();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const { place } = location.state || {};
 
   useEffect(() => {
-    // For testing purposes, we will hardcode the available dates
-    const testDates = [
-      "2024-08-01",
-      "2024-08-02",
-      "2024-08-03",
-      "2024-08-04",
-      "2024-08-05",
-      "2024-08-06"
-    ];
+    (async () => {
+      // For testing purposes, we will hardcode the available dates
+      const testDates = [
+        "2024-08-01",
+        "2024-08-02",
+        "2024-08-03",
+        "2024-08-04",
+        "2024-08-05",
+        "2024-08-06",
+      ];
 
-    // Convert the list of date strings to Date objects
-    const dates = testDates.map(dateString => new Date(dateString));
-    setAvailableDates(dates);
-  }, []);
+      // Convert the list of date strings to Date objects
+      const dates = testDates.map((dateString) => new Date(dateString));
+      setAvailableDates(dates);
+
+      const siteId = searchParams.get("siteId");
+      console.log(siteId);
+      try {
+        const response = await fetch(`${API_BASE_URL}/sites/${siteId}`);
+        const site = await response.json();
+        setSite(site);
+        console.log(site);
+      } catch (err) {
+        alert(err);
+      }
+    })();
+  }, [searchParams]);
 
   const handleDateChange = (dates) => {
     const [start, end] = dates;
@@ -39,9 +65,50 @@ const BookingPage = () => {
     setGuests(parseInt(event.target.value, 10));
   };
 
-  const addToCart = () => {
-    // Redirect to the PaymentPage
-    navigate('/payment');
+  const pad = (num, size) => {
+    num = num.toString();
+    while (num.length < size) num = "0" + num;
+    return num;
+  };
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1, 2);
+    const day = pad(date.getDate(), 2);
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const addToCart = async () => {
+    try {
+      const checkInDateStr = formatDate(startDate);
+      const checkOutDateStr = formatDate(endDate);
+
+      let url = new URL(`${API_BASE_URL}/create-booking`);
+      url.searchParams.set("clientId", clientId);
+      url.searchParams.set("siteId", site.id);
+      url.searchParams.set("checkInDate", checkInDateStr);
+      url.searchParams.set("checkOutDate", checkOutDateStr);
+
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      const booking = await response.json();
+      console.log(booking);
+
+      navigate({
+        pathname: "/pay",
+        search: createSearchParams({
+          bookingId: booking.id,
+        }).toString(),
+      });
+    } catch (err) {
+      alert(err);
+    }
   };
 
   const addToWishlist = () => {
@@ -49,25 +116,25 @@ const BookingPage = () => {
   };
 
   const isAvailableDate = (date) => {
-    return availableDates.some(availableDate =>
-      date.toDateString() === availableDate.toDateString()
+    return availableDates.some(
+      (availableDate) => date.toDateString() === availableDate.toDateString()
     );
   };
-
-  if (!place) {
-    return <div>Place not found</div>;
-  }
 
   return (
     <div className="container mx-auto p-4 max-w-6xl">
       <div className="grid grid-rows-1 gap-4">
         {/* Top Row: Image with Heart Icon */}
         <div className="relative w-full max-w-full mx-auto">
-          <img src={place.img} alt={place.title} className="w-full h-auto object-cover rounded-lg shadow-lg" />
-          <button 
-            onClick={addToWishlist} 
+          {/* <img
+            src={place.img}
+            alt={place.title}
+            className="w-full h-auto object-cover rounded-lg shadow-lg"
+          /> */}
+          <button
+            onClick={addToWishlist}
             className="absolute top-2 right-2 p-1 rounded-full bg-white bg-opacity-50 hover:bg-opacity-75 transition"
-            style={{ border: 'none', outline: 'none' }}
+            style={{ border: "none", outline: "none" }}
           >
             <FaHeart size={24} className="text-red-500" />
           </button>
@@ -76,10 +143,10 @@ const BookingPage = () => {
         {/* Content and Booking Options */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Content Column */}
-          <div className="md:col-span-1">
+          {/* <div className="md:col-span-1">
             <h1 className="text-3xl font-bold my-4">{place.title}</h1>
             <p className="text-gray-700">{place.description}</p>
-          </div>
+          </div> */}
 
           {/* Booking Options Column */}
           <div className="md:col-span-1">
@@ -88,7 +155,9 @@ const BookingPage = () => {
               <div className="mb-6">
                 {/* Styled Date Range Picker */}
                 <div className="bg-white p-4 shadow rounded-lg border border-gray-200 w-full">
-                  <label className="block text-gray-700 mb-2 text-lg font-medium">Select Dates:</label>
+                  <label className="block text-gray-700 mb-2 text-lg font-medium">
+                    Select Dates:
+                  </label>
                   <DatePicker
                     selected={startDate}
                     onChange={handleDateChange}
@@ -107,7 +176,9 @@ const BookingPage = () => {
               <div className="mb-6">
                 {/* Guests Input */}
                 <div className="flex items-center justify-between">
-                  <label className="block text-gray-700">Number of Guests:</label>
+                  <label className="block text-gray-700">
+                    Number of Guests:
+                  </label>
                   <input
                     type="number"
                     value={guests}

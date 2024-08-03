@@ -36,6 +36,11 @@ public class BookingController {
         return bookingService.getAllBooking();
     }
 
+    @GetMapping(value = "/bookings/{id}")
+    public Booking one(@PathVariable Long id) {
+        return bookingService.one(id);
+    }
+
     @PutMapping("/{bookingId}/cancel")
     public void cancelBooking(@PathVariable Long bookingId) {
         bookingService.cancelBooking(bookingId);

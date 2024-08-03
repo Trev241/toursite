@@ -65,7 +65,7 @@ function App() {
               }
             />
             <Route path="/booking" element={<BookingPage />} />
-            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/pay" element={<PaymentPage />} />
             <Route path="/profile" element={<Profile />} />{" "}
             {/* Add this line */}
             <Route path="/signin" element={<SignIn />} />
