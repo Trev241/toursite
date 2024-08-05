@@ -1,6 +1,14 @@
 // App.js
 
+<<<<<<< Updated upstream
 import React, { useState } from "react";
+=======
+<<<<<<< HEAD
+import React, { useContext, useState } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> f27b2f8a1517aab402d4373547c7ed8bad5fd9db
+>>>>>>> Stashed changes
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,11 +21,28 @@ import Hero from "./components/Hero";
 import Places from "./components/destinations/Places";
 import AuthModal from "./components/AuthModal";
 import BookingPage from "./components/BookingPage";
+<<<<<<< Updated upstream
 import Profile from "./components/Profile"; // Import Profile
 import SignIn from "./pages/Signin";
 import { Booking } from "./components/Booking";
 
 function App() {
+=======
+<<<<<<< HEAD
+import PaymentPage from "./components/PaymentPage";
+import Profile from "./components/Profile"; // Import Profile
+import { AuthContext } from "./components/AuthProvider";
+
+function App() {
+  const { clientId, setClientId } = useContext(AuthContext); // setting the client id
+=======
+import Profile from "./components/Profile"; // Import Profile
+import SignIn from "./pages/Signin";
+import { Booking } from "./components/Booking";
+
+function App() {
+>>>>>>> f27b2f8a1517aab402d4373547c7ed8bad5fd9db
+>>>>>>> Stashed changes
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [email, setEmail] = useState(null); // Store email instead of username
 
@@ -63,10 +88,22 @@ function App() {
               }
             />
             <Route path="/booking" element={<BookingPage />} />
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/profile" element={<Profile />} />{" "}
+            {/* Add this line */}
+=======
+>>>>>>> Stashed changes
             <Route path="/pay" element={<Booking />} />
             <Route path="/profile" element={<Profile />} />{" "}
             {/* Add this line */}
             <Route path="/signin" element={<SignIn />} />
+<<<<<<< Updated upstream
+=======
+>>>>>>> f27b2f8a1517aab402d4373547c7ed8bad5fd9db
+>>>>>>> Stashed changes
           </Routes>
         </div>
         {showAuthModal && (

@@ -10,7 +10,15 @@ function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
   const [nav, setNav] = useState(false);
   const [logo, setLogo] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+<<<<<<< Updated upstream
   const { clientId, setClientId } = useContext(AuthContext); // setting the client id
+=======
+<<<<<<< HEAD
+  //const {clientId,setClientId}= useContext(AuthContext);// setting the client id 
+=======
+  const { clientId, setClientId } = useContext(AuthContext); // setting the client id
+>>>>>>> f27b2f8a1517aab402d4373547c7ed8bad5fd9db
+>>>>>>> Stashed changes
 
   const handleNav = () => {
     setNav(!nav);
@@ -49,9 +57,21 @@ function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
           />
         </div>
         {username && (
+<<<<<<< Updated upstream
           <div className="relative">
             <div className="cursor-pointer" onClick={toggleDropdown}>
               <h2 className="text-sm">{clientId}</h2>
+=======
+<<<<<<< HEAD
+          <div className='relative'>
+            <div className='cursor-pointer' onClick={toggleDropdown}>
+              <h2 className='text-sm'>{username}</h2>
+=======
+          <div className="relative">
+            <div className="cursor-pointer" onClick={toggleDropdown}>
+              <h2 className="text-sm">{clientId}</h2>
+>>>>>>> f27b2f8a1517aab402d4373547c7ed8bad5fd9db
+>>>>>>> Stashed changes
             </div>
             {dropdownOpen && (
               <div className="absolute top-full right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg p-4">
