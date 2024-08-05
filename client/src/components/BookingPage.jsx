@@ -69,8 +69,6 @@ const BookingPage = () => {
       });
 
       const booking = await response.json();
-      console.log(booking);
-
       navigate({
         pathname: "/pay",
         search: createSearchParams({
