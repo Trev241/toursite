@@ -10,6 +10,8 @@ import humber.ds.toursite.repository.BookingRepository;
 import humber.ds.toursite.repository.ClientRepository;
 import humber.ds.toursite.repository.SiteRepository;
 import humber.ds.toursite.service.BookingService;
+import humber.ds.toursite.service.BookingState;
+import humber.ds.toursite.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +27,20 @@ public class BookingServiceImp implements BookingService {
     private final BookingRepository bookingRepository;
     private final ClientRepository clientRepository;
     private final SiteRepository siteRepository;
+    private final EmailService emailService;
+    private final BookingState bookingState;
 
     @Autowired
     public BookingServiceImp(BookingRepository bookingRepository,
-            ClientRepository clientRepository,
-            SiteRepository siteRepository) {
+                             ClientRepository clientRepository,
+                             SiteRepository siteRepository,
+                             EmailService emailService,
+                             BookingState bookingState) {
         this.bookingRepository = bookingRepository;
         this.clientRepository = clientRepository;
         this.siteRepository = siteRepository;
+        this.emailService = emailService;
+        this.bookingState = bookingState;
     }
 
     @Override
@@ -48,9 +56,13 @@ public class BookingServiceImp implements BookingService {
         Site site = siteRepository.findById(siteId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid site ID: " + siteId));
 
+        if (!checkOutDate.isAfter(checkInDate)) {
+            throw new IllegalArgumentException("Checkout date must be after checkin date.");
+        }
+
         BookingStatus bookingStatus = checkAvailability(siteId, checkInDate, checkOutDate)
-                ? BookingStatus.PROCESSING
-                : BookingStatus.PENDING;
+                ? bookingState.setState(BookingStatus.PROCESSING)
+                : bookingState.setState(BookingStatus.PENDING);
 
         Booking booking = new Booking();
         booking.setClientId(clientId);
@@ -93,7 +105,7 @@ public class BookingServiceImp implements BookingService {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid booking ID: " + id));
 
-        booking.setStatus(BookingStatus.CANCELLED);
+        booking.setStatus(bookingState.setState(BookingStatus.CANCELLED));
         bookingRepository.save(booking);
 
         List<Booking> waitingBookings = bookingRepository.findBySiteIdAndStatus(booking.getSiteId(),
@@ -143,10 +155,7 @@ public class BookingServiceImp implements BookingService {
                 String message = String.format(
                         "Dear %s, the site you were interested in is now available from %s to %s. Please visit our website to confirm your booking.",
                         client.getUsername(), canceledCheckIn, canceledCheckOut);
-                // emailService.sendEmail(client.getEmail(), "Site Availability Notification",
-                // message);
-                System.out.println(client.getEmail());
-                System.out.println(message);
+//                 emailService.sendEmail(client.getEmail(), "Site Availability Notification", message);
             }
         }
     }
