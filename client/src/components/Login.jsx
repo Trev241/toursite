@@ -50,7 +50,7 @@ const Login = ({ onClose, onSwitchToSignUp, onLoginSuccess }) => {
   };
 
   return (
-    <div
+     <div
       className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
       onClick={handleOverlayClick}
     >
@@ -88,7 +88,14 @@ const Login = ({ onClose, onSwitchToSignUp, onLoginSuccess }) => {
           </div>
           <button
             type="submit"
-            className="w-full p-3 border bg-gradient-to-r from-[var(--primary-dark)] to-[var(--primary-light)] text-white rounded-md hover:opacity-90 transition-opacity duration-300"
+            className="w-full p-3 bg-blue-500 text-black rounded-md hover:bg-blue-600 transition-colors duration-300"
+            style={{
+              backgroundColor: "#3490dc", // Blue color
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "1.25rem",
+              textShadow: "1px 1px 2px rgba(255, 255, 255, 0.2)"
+            }}
           >
             LOGIN
           </button>
@@ -123,5 +130,4 @@ const Login = ({ onClose, onSwitchToSignUp, onLoginSuccess }) => {
     </div>
   );
 };
-
 export default Login;
