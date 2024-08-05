@@ -29,26 +29,24 @@ const BookingPage = () => {
   useEffect(() => {
     (async () => {
       // For testing purposes, we will hardcode the available dates
-      const testDates = [
-        "2024-08-01",
-        "2024-08-02",
-        "2024-08-03",
-        "2024-08-04",
-        "2024-08-05",
-        "2024-08-06",
-      ];
+      // const testDates = [
+      //   "2024-08-01",
+      //   "2024-08-02",
+      //   "2024-08-03",
+      //   "2024-08-04",
+      //   "2024-08-05",
+      //   "2024-08-06",
+      // ];
 
       // Convert the list of date strings to Date objects
-      const dates = testDates.map((dateString) => new Date(dateString));
-      setAvailableDates(dates);
+      // const dates = testDates.map((dateString) => new Date(dateString));
+      // setAvailableDates(dates);
 
       const siteId = searchParams.get("siteId");
-      console.log(siteId);
       try {
         const response = await fetch(`${API_BASE_URL}/sites/${siteId}`);
         const site = await response.json();
         setSite(site);
-        console.log(site);
       } catch (err) {
         alert(err);
       }
@@ -98,7 +96,6 @@ const BookingPage = () => {
       });
 
       const booking = await response.json();
-      console.log(booking);
 
       navigate({
         pathname: "/pay",
@@ -169,7 +166,7 @@ const BookingPage = () => {
                     className="w-full"
                     calendarClassName="w-full"
                     popperClassName="react-datepicker-popper"
-                    filterDate={isAvailableDate}
+                    // filterDate={isAvailableDate}
                   />
                 </div>
               </div>

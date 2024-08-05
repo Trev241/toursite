@@ -1,6 +1,6 @@
 // App.js
 
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,13 +13,11 @@ import Hero from "./components/Hero";
 import Places from "./components/destinations/Places";
 import AuthModal from "./components/AuthModal";
 import BookingPage from "./components/BookingPage";
-import PaymentPage from "./components/PaymentPage";
 import Profile from "./components/Profile"; // Import Profile
 import SignIn from "./pages/Signin";
-import { AuthContext } from "./components/AuthProvider";
+import { Booking } from "./components/Booking";
 
 function App() {
-  const { clientId, setClientId } = useContext(AuthContext); // setting the client id
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [email, setEmail] = useState(null); // Store email instead of username
 
@@ -65,7 +63,7 @@ function App() {
               }
             />
             <Route path="/booking" element={<BookingPage />} />
-            <Route path="/pay" element={<PaymentPage />} />
+            <Route path="/pay" element={<Booking />} />
             <Route path="/profile" element={<Profile />} />{" "}
             {/* Add this line */}
             <Route path="/signin" element={<SignIn />} />
