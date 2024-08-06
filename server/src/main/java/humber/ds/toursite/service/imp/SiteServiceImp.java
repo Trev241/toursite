@@ -34,7 +34,6 @@ public class SiteServiceImp implements SiteService {
     public Site replaceSite(Site newSite, Long id) {
         return siteRepository.findById(id)
                 .map(site -> {
-                    site.setRate(newSite.getRate());
                     site.setStreet(newSite.getStreet());
                     site.setCity(newSite.getCity());
                     site.setZip(newSite.getZip());

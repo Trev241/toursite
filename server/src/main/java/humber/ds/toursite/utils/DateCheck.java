@@ -1,6 +1,5 @@
 package humber.ds.toursite.utils;
 
-import humber.ds.toursite.enums.BookingStatus;
 import humber.ds.toursite.model.Booking;
 
 import java.time.LocalDate;

@@ -1,17 +1,21 @@
 package humber.ds.toursite.model;
 
+import java.util.List;
+
 import humber.ds.toursite.enums.SiteStatus;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Site {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private double rate;
     private String street;
     private String city;
     private String zip;
@@ -21,12 +25,16 @@ public class Site {
     private double price;
     private String description;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo.id")
+    private List<Photo> photos;
+
     Site() {
         this.status = SiteStatus.AVAILABLE;
     }
 
-    Site(double rate, String street, String city, String zip, String country, String phone, SiteStatus status, double price, String description) {
-        this.rate = rate;
+    Site(String street, String city, String zip, String country, String phone, SiteStatus status,
+            double price, String description, List<Photo> photos) {
         this.street = street;
         this.city = city;
         this.zip = zip;
@@ -35,14 +43,11 @@ public class Site {
         this.status = status;
         this.price = price;
         this.description = description;
+        this.photos = photos;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public double getRate() {
-        return rate;
     }
 
     public String getStreet() {
@@ -69,12 +74,12 @@ public class Site {
         return status;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public List<Photo> getPhotos() {
+        return photos;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setStreet(String street) {
