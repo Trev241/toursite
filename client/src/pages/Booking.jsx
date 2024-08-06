@@ -1,9 +1,9 @@
 import { useState } from "react";
-import PaymentPage from "./PaymentPage";
-import { PaymentOption } from "./PaymentOption";
-import PaymentSummary from "./PaymentSummary";
-import { Checkout } from "./Checkout";
-import StageMarker from "./StageMarker";
+import PaymentPage from "../components/PaymentPage";
+import { PaymentOption } from "../components/PaymentOption";
+import PaymentSummary from "../components/PaymentSummary";
+import { Checkout } from "../components/Checkout";
+import StageMarker from "../components/StageMarker";
 
 export const Booking = () => {
   const [stage, setStage] = useState(0);

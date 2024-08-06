@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,8 +13,7 @@ import AuthModal from "./components/AuthModal";
 import BookingPage from "./components/BookingPage";
 import Profile from "./components/Profile"; // Import Profile
 import SignIn from "./pages/Signin";
-import { Booking } from "./components/Booking";
-import { AuthContext } from "./components/AuthProvider"; // Import AuthContext
+import { Booking } from "./pages/Booking";
 
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
