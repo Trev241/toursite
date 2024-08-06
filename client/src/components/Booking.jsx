@@ -3,10 +3,13 @@ import PaymentPage from "./PaymentPage";
 import { PaymentOption } from "./PaymentOption";
 import PaymentSummary from "./PaymentSummary";
 import { Checkout } from "./Checkout";
+import StageMarker from "./StageMarker";
 
 export const Booking = () => {
   const [stage, setStage] = useState(0);
   const [data, setData] = useState({});
+
+  const stages = ["Review", "Payment", "Summary", "Checkout"];
 
   const changeStage = (newData) => {
     setData({ ...data, ...newData });
@@ -30,5 +33,19 @@ export const Booking = () => {
     }
   };
 
-  return <div>{currentStage()}</div>;
+  return (
+    <div className="container mx-auto">
+      <div class="relative flex pt-8 pb-12 items-center">
+        {stages.map((s, idx) => (
+          <StageMarker
+            key={idx}
+            complete={stage > idx}
+            name={s}
+            last={idx === stages.length - 1}
+          />
+        ))}
+      </div>
+      <div>{currentStage()}</div>
+    </div>
+  );
 };

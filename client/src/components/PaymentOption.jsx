@@ -37,7 +37,7 @@ export const PaymentOption = ({ data, next }) => {
   };
 
   return (
-    <div className="container mx-auto flex flex-col justify-center min-h-screen">
+    <div className="container mx-auto flex flex-col">
       <h1 className="text-5xl mb-8">Choose a method of payment</h1>
 
       <form onSubmit={handleNext}>
