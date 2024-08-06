@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Login from './Login'; // Ensure this path is correct
-import SignUp from './Signup'; // Ensure this path is correct
+import Login from './Login'; 
+import SignUp from './Signup'; 
 
 const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);

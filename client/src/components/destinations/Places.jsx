@@ -1,21 +1,20 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import Img1 from "../../assets/places/boat.jpg";
+import React, { useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import SiteContext from '../SiteContext';
 
 const Places = () => {
     const navigate = useNavigate();
-    const [places, setPlaces] = useState([]);
+    const { sites, setSites } = useContext(SiteContext);
 
     useEffect(() => {
         // Fetch data from API
         fetch("http://localhost:8081/api/v1/sites")
             .then((response) => response.json())
-            .then((data) => setPlaces(data))
+            .then((data) => setSites(data))
             .catch((error) => console.error("Error fetching data:", error));
-    }, []);
+    }, [setSites]);
 
     const handleBookClick = (place) => {
-        // Navigate to BookingPage with place details
         navigate(`/booking?siteId=${place.id}`);
     };
 
@@ -26,7 +25,7 @@ const Places = () => {
                     Best Places to Visit
                 </h1>
                 <div className="space-y-6">
-                    {places.map((item) => (
+                    {sites.map((item) => (
                         <div
                             key={item.id}
                             className="flex items-center bg-white shadow-lg p-6 rounded-lg border border-gray-200"
@@ -34,7 +33,7 @@ const Places = () => {
                             <div
                                 className="w-64 h-40 flex items-center justify-center overflow-hidden rounded-md border border-gray-300">
                                 <img
-                                    src={Img1}
+                                    src={item.imageUrl}  // Use the image URL from the site object
                                     alt={item.description}
                                     className="object-cover h-full w-full"
                                 />

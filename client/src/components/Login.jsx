@@ -3,13 +3,13 @@ import "font-awesome/css/font-awesome.min.css"; // Importing FontAwesome CSS
 import { AuthContext } from "./AuthProvider";
 import { useNavigate } from "react-router-dom";
 
-
 const Login = ({ onClose, onSwitchToSignUp, onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
-  const { setClientId } = useContext(AuthContext); // setting the client id
+  const { setClientId , setClient } = useContext(AuthContext); // setting the client id
+
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -20,9 +20,7 @@ const Login = ({ onClose, onSwitchToSignUp, onLoginSuccess }) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      const url = isAdmin
-        ? "http://localhost:8081/api/v1/clients/signin"
-        : "http://localhost:8081/api/v1/clients/signin";
+      const url = "http://localhost:8081/api/v1/clients/signin";
 
       const response = await fetch(url, {
         method: "POST",
@@ -36,21 +34,28 @@ const Login = ({ onClose, onSwitchToSignUp, onLoginSuccess }) => {
         throw new Error("Login failed");
       }
 
-
       const data = await response.json();
       console.log(data);
       const clientId = data.id;
+      const role = data.role; // Get the role from the response
+
       setClientId(clientId);
       onLoginSuccess(data.email); // Pass the email to the parent component
+      setClient(data)
       onClose(); // Close the modal after successful login
-      navigate("/");
+
+      if (role === "admin") {
+        navigate("/admin-profile"); // Redirect to AdminProfile page
+      } else {
+        navigate("/profile"); // Redirect to Profile page
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
   return (
-     <div
+    <div
       className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
       onClick={handleOverlayClick}
     >
@@ -130,4 +135,5 @@ const Login = ({ onClose, onSwitchToSignUp, onLoginSuccess }) => {
     </div>
   );
 };
+
 export default Login;

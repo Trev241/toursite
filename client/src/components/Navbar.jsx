@@ -1,17 +1,19 @@
 // Navbar.jsx
 
-import React, {useState } from 'react';
+import React, {useContext, useState } from 'react';
 import { BsPerson } from 'react-icons/bs';
 import { BiSearch } from 'react-icons/bi';
 import { AiOutlineClose } from 'react-icons/ai';
 import { HiOutlineMenuAlt4 } from 'react-icons/hi'; 
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 import { Link } from 'react-router-dom'; // Import Link
+import { AuthContext  } from './AuthProvider';
 
 function Navbar({ onAuthModalToggle, username, onLogout }) {
   const [nav, setNav] = useState(false);
   const [logo, setLogo] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const {client} = useContext(AuthContext);
   const handleNav = () => {
     setNav(!nav);
     setLogo(!logo);
@@ -38,10 +40,10 @@ function Navbar({ onAuthModalToggle, username, onLogout }) {
         <div className='relative'>
           <BsPerson size={20} onClick={onAuthModalToggle} className='cursor-pointer' />
         </div>
-        {username && (
+        {client && (
           <div className='relative'>
             <div className='cursor-pointer' onClick={toggleDropdown}>
-              <h2 className='text-sm'>{username}</h2>
+              <h2 className='text-sm'>{client.email}</h2>
             </div>
             {dropdownOpen && (
               <div className='absolute top-full right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg p-4'>

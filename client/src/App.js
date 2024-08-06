@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,21 +13,24 @@ import Places from "./components/destinations/Places";
 import AuthModal from "./components/AuthModal";
 import BookingPage from "./components/BookingPage";
 import Profile from "./components/Profile"; // Import Profile
+import AdminProfile from "./components/AdminProfile"; // Import AdminProfile
 import SignIn from "./pages/Signin";
+import { Booking } from "./components/Booking";
+import { AuthContext } from "./components/AuthProvider"; // Import AuthContext
+import { SiteProvider } from "./components/SiteContext"; // Import SiteProvider
 
 import { Booking } from "./pages/Booking";
 
-
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [email, setEmail] = useState(null); // Store email instead of username
+  const [user, setUser] = useState(null); // Store user object instead of just email
 
   const handleAuthModalToggle = () => {
     setShowAuthModal((prev) => !prev);
   };
 
-  const handleLoginSuccess = (email) => {
-    setEmail(email); // Update the state with the email
+  const handleLoginSuccess = (user) => {
+    setUser(user); // Update the state with the user object
     setShowAuthModal(false); // Close the authentication modal on success
   };
 
@@ -35,12 +39,15 @@ function App() {
     const location = useLocation();
     // Render Navbar only if the path is "/"
     return location.pathname === "/" ? (
-      <Navbar onAuthModalToggle={handleAuthModalToggle} username={email} />
+      <Navbar
+        onAuthModalToggle={handleAuthModalToggle}
+        username={user?.email}
+      />
     ) : (
       <NavbarPages
         onAuthModalToggle={handleAuthModalToggle}
-        username={email}
-        onLogout={() => setEmail(null)}
+        username={user?.email}
+        onLogout={() => setUser(null)}
         isHeader={true}
       />
     );
@@ -48,38 +55,45 @@ function App() {
 
   return (
     <Router>
-      <div className="relative">
-        <div className={showAuthModal ? "blur-sm" : ""}>
-          {/* Conditionally render Navbar or NavbarPages */}
-          <ConditionalNavbar />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  {/*<Profile />*/}
-                  <Hero />
-                  <Places />
-                </>
-              }
-            />
-            <Route path="/booking" element={<BookingPage />} />
-            <Route path="/pay" element={<Booking />} />
-            <Route path="/profile/*" element={<Profile />} />{" "}
-            {/* Add this line */}
-            <Route path="/signin" element={<SignIn />} />
-          </Routes>
-        </div>
-        {showAuthModal && (
-          <div className="fixed inset-0 z-50">
-            <AuthModal
-              isOpen={showAuthModal}
-              onClose={handleAuthModalToggle}
-              onLoginSuccess={handleLoginSuccess} // Pass handleLoginSuccess to AuthModal
-            />
+      <SiteProvider>
+        <div className="relative">
+          <div className={showAuthModal ? "blur-sm" : ""}>
+            {/* Conditionally render Navbar or NavbarPages */}
+            <ConditionalNavbar />
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <Hero />
+                    <Places />
+                  </>
+                }
+              />
+              <Route path="/booking" element={<BookingPage />} />
+              <Route path="/pay" element={<Booking />} />
+              <Route
+                path="/profile"
+                element={<Profile />} // Render Profile component
+              />
+              <Route
+                path="/admin-profile"
+                element={<AdminProfile />} // Render AdminProfile component
+              />
+              <Route path="/signin" element={<SignIn />} />
+            </Routes>
           </div>
-        )}
-      </div>
+          {showAuthModal && (
+            <div className="fixed inset-0 z-50">
+              <AuthModal
+                isOpen={showAuthModal}
+                onClose={handleAuthModalToggle}
+                onLoginSuccess={handleLoginSuccess} // Pass handleLoginSuccess to AuthModal
+              />
+            </div>
+          )}
+        </div>
+      </SiteProvider>
     </Router>
   );
 }
