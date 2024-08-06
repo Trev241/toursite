@@ -13,7 +13,9 @@ import AuthModal from "./components/AuthModal";
 import BookingPage from "./components/BookingPage";
 import Profile from "./components/Profile"; // Import Profile
 import SignIn from "./pages/Signin";
+
 import { Booking } from "./pages/Booking";
+
 
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -55,6 +57,7 @@ function App() {
               path="/"
               element={
                 <>
+                  {/*<Profile />*/}
                   <Hero />
                   <Places />
                 </>
@@ -62,7 +65,7 @@ function App() {
             />
             <Route path="/booking" element={<BookingPage />} />
             <Route path="/pay" element={<Booking />} />
-            <Route path="/profile" element={<Profile />} />{" "}
+            <Route path="/profile/*" element={<Profile />} />{" "}
             {/* Add this line */}
             <Route path="/signin" element={<SignIn />} />
           </Routes>

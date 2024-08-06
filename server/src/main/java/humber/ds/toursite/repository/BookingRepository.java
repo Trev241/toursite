@@ -2,6 +2,7 @@ package humber.ds.toursite.repository;
 
 import humber.ds.toursite.enums.BookingStatus;
 import humber.ds.toursite.model.Booking;
+import humber.ds.toursite.model.BookingSiteDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,9 +17,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByClientId(Long clientId);
 
-    List<Booking> findByStatus(BookingStatus status);
-
     List<Booking> findByStatusAndPaymentCompletedFalse(BookingStatus bookingStatus);
+
+    List<Booking> findByClientIdAndStatus(Long clientId, BookingStatus bookingStatus);
 
     @Modifying
     @Transactional
@@ -32,5 +33,21 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                                             @Param("bookingId") Long bookingId,
                                             @Param("checkInDate") LocalDate checkInDate,
                                             @Param("checkOutDate") LocalDate checkOutDate);
+
+
+    @Query("SELECT new humber.ds.toursite.model.BookingSiteDTO(" +
+            "b.id, " +
+            "b.checkInDate, " +
+            "b.checkOutDate, " +
+            "b.status, " +
+            "b.netTotal, " +
+            "s.city, " +
+            "s.country) " +
+            "FROM Booking b " +
+            "JOIN Site s ON b.siteId = s.id " +
+            "WHERE b.clientId = :clientId " +
+            "ORDER BY b.checkInDate")
+    List<BookingSiteDTO> findAllByClientIdWithSiteInfo(@Param("clientId") Long clientId);
+
 
 }

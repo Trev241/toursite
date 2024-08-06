@@ -37,7 +37,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const { clientId, setClientId } = React.useContext(AuthContext);
+  const { setClientId } = React.useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

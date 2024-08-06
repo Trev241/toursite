@@ -2,10 +2,7 @@ package humber.ds.toursite.service.imp;
 
 import humber.ds.toursite.enums.BookingStatus;
 import humber.ds.toursite.exceptions.BookingNotFoundException;
-import humber.ds.toursite.model.Booking;
-import humber.ds.toursite.model.Client;
-import humber.ds.toursite.model.Coupon;
-import humber.ds.toursite.model.Site;
+import humber.ds.toursite.model.*;
 import humber.ds.toursite.repository.BookingRepository;
 import humber.ds.toursite.repository.ClientRepository;
 import humber.ds.toursite.repository.SiteRepository;
@@ -125,13 +122,13 @@ public class BookingServiceImp implements BookingService {
     }
 
     @Override
-    public List<Booking> getPendingBooking(Long siteId) {
-        return bookingRepository.findBySiteIdAndStatus(siteId, BookingStatus.PENDING);
+    public List<Booking> getPendingBooking(Long clientId) {
+        return bookingRepository.findByClientIdAndStatus(clientId, BookingStatus.PENDING);
     }
 
     @Override
-    public List<Booking> getProcessingBooking(Long siteId) {
-        return bookingRepository.findBySiteIdAndStatus(siteId, BookingStatus.PROCESSING);
+    public List<BookingSiteDTO> getBookingByClientId(Long clientId) {
+        return bookingRepository.findAllByClientIdWithSiteInfo(clientId);
     }
 
     private double calculateTotalPrice(double pricePerNight, int nights) {

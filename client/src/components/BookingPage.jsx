@@ -9,7 +9,7 @@ import Img1 from "./../assets/places/boat.jpg";
 
 import "./BookingPage.css";
 
-Modal.setAppElement("#root"); // Make sure to set the app element for accessibility
+Modal.setAppElement("#root");
 
 const BookingPage = () => {
     const { clientId } = useContext(AuthContext);
@@ -59,6 +59,11 @@ const BookingPage = () => {
     };
 
     const reserve = async () => {
+        if (!clientId) {
+            setModalMessage("You need to log in before proceeding with the booking.");
+            setModalIsOpen(true);
+            return;
+        }
         try {
             const checkInDateStr = formatDate(startDate);
             const checkOutDateStr = formatDate(endDate);
@@ -171,39 +176,6 @@ const BookingPage = () => {
                     </button>
                 </div>
             </Modal>
-
-            <style jsx>{`
-        .react-datepicker__header {
-          background-color: #4a90e2;
-          color: white;
-        }
-        .react-datepicker__day {
-          border-radius: 50%;
-        }
-        .react-datepicker__day--selected {
-          background-color: #4a90e2;
-          color: white;
-        }
-        .react-datepicker__day--range-start,
-        .react-datepicker__day--range-end {
-          background-color: #4a90e2;
-          color: white;
-        }
-        .react-datepicker__day--today {
-          font-weight: bold;
-          border: 1px solid #4a90e2;
-        }
-        .react-datepicker__day:hover {
-          background-color: #e1e1e1;
-        }
-        .react-datepicker {
-          border-radius: 8px;
-          border: 1px solid #d1d5db;
-        }
-        .react-datepicker__triangle {
-          display: none;
-        }
-      `}</style>
         </div>
     );
 };

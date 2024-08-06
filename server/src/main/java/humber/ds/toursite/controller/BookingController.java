@@ -1,6 +1,7 @@
 package humber.ds.toursite.controller;
 
 import humber.ds.toursite.model.Booking;
+import humber.ds.toursite.model.BookingSiteDTO;
 import humber.ds.toursite.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -46,15 +47,15 @@ public class BookingController {
         bookingService.cancelBooking(bookingId);
     }
 
-    @GetMapping(value = "/booking-pending")
-    public ResponseEntity<List<Booking>> getAllPendingBookings(@RequestParam Long siteId) {
-        List<Booking> bookings = bookingService.getPendingBooking(siteId);
+    @GetMapping(value = "/booking-pending/{clientId}")
+    public ResponseEntity<List<Booking>> getAllPendingBookings(@PathVariable Long clientId) {
+        List<Booking> bookings = bookingService.getPendingBooking(clientId);
         return ResponseEntity.ok(bookings);
     }
 
-    @GetMapping(value = "/booking-processing")
-    public ResponseEntity<List<Booking>> getAllProcessingBookings(@RequestParam Long siteId) {
-        List<Booking> bookings = bookingService.getProcessingBooking(siteId);
+    @GetMapping(value = "/booking-all/{clientId}")
+    public ResponseEntity<List<BookingSiteDTO>> getAllProcessingBookings(@PathVariable Long clientId) {
+        List<BookingSiteDTO> bookings = bookingService.getBookingByClientId(clientId);
         return ResponseEntity.ok(bookings);
     }
 }
