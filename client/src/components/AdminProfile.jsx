@@ -304,7 +304,7 @@ const AdminProfile = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                  <TableCell>ID</TableCell>
+                  
                   <TableCell>Site ID</TableCell>
                   <TableCell>Client ID</TableCell>
                   <TableCell>Booking Date</TableCell>
@@ -321,7 +321,7 @@ const AdminProfile = () => {
                 <TableBody>
                   {Array.isArray(bookings) && bookings.map((booking) => (
                      <TableRow key={booking.id}>
-                     <TableCell>{booking.id}</TableCell>
+                     
                      <TableCell>{booking.siteId}</TableCell>
                      <TableCell>{booking.clientId}</TableCell>
                      <TableCell>{new Date(booking.bookingDate).toLocaleString()}</TableCell>
