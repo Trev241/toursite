@@ -72,8 +72,7 @@ public class PaymentServiceImp implements PaymentService {
                 booking.getSiteId(),
                 booking.getId(),
                 booking.getCheckInDate(),
-                booking.getCheckOutDate()
-        );
+                booking.getCheckOutDate());
 
         return payments;
     }
@@ -84,6 +83,11 @@ public class PaymentServiceImp implements PaymentService {
                 .orElseThrow(() -> new RuntimeException());
 
         payment.setStatus(PaymentStatus.SUCCESS);
+
+        Booking booking = payment.getBooking();
+        booking.setPaymentCompleted(true);
+        bookingRepository.save(booking);
+
         return paymentRepository.save(payment);
     }
 
