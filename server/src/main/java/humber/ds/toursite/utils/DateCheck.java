@@ -11,8 +11,8 @@ public class DateCheck {
         return start1.isBefore(end2) && start2.isBefore(end1);
     }
 
-    public boolean checkAvailability(List<Booking> bookings, LocalDate checkInDate, LocalDate checkOutDate) {
-        return bookings.stream().noneMatch(booking -> (checkInDate.isBefore(booking.getCheckOutDate())
+    public boolean checkAvailability(List<Booking> bookingsConfirmed, LocalDate checkInDate, LocalDate checkOutDate) {
+        return bookingsConfirmed.stream().noneMatch(booking -> (checkInDate.isBefore(booking.getCheckOutDate())
                 && checkOutDate.isAfter(booking.getCheckInDate())));
     }
 }
