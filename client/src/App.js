@@ -20,6 +20,22 @@ import { SiteProvider } from "./components/SiteContext"; // Import SiteProvider
 
 import { Booking } from "./pages/Booking";
 
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDnu3HEzAb5YQ6945hjMvX1PkIlvljVHjU",
+  authDomain: "toursite-d133f.firebaseapp.com",
+  projectId: "toursite-d133f",
+  storageBucket: "toursite-d133f.appspot.com",
+  messagingSenderId: "341982185720",
+  appId: "1:341982185720:web:e73fea88fb98b4c8bc130d",
+  measurementId: "G-DEFYXV5GKN",
+};
+
+const app = initializeApp(firebaseConfig);
+const _ = getAnalytics(app);
+
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [user, setUser] = useState(null); // Store user object instead of just email
