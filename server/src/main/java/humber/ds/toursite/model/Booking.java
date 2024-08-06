@@ -32,16 +32,19 @@ public class Booking {
     private double discount;
     private double netTotal;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDate paymentDeadline;
+    private boolean paymentCompleted;
+
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon.id")
     private List<Coupon> coupons;
 
-    public Booking() {
-    }
+    public Booking() {}
 
     public Booking(Long id, Long siteId, Long clientId, LocalDateTime bookingDate,
             LocalDate checkInDate, LocalDate checkOutDate, BookingStatus status, double totalPrice, double discount,
-            double netTotal) {
+            double netTotal, LocalDate paymentDeadline, boolean paymentCompleted) {
         this.id = id;
         this.siteId = siteId;
         this.clientId = clientId;
@@ -52,6 +55,8 @@ public class Booking {
         this.totalPrice = totalPrice;
         this.discount = discount;
         this.netTotal = netTotal;
+        this.paymentDeadline = paymentDeadline;
+        this.paymentCompleted = paymentCompleted;
     }
 
     public Long getId() {
@@ -136,5 +141,21 @@ public class Booking {
 
     public void setNetTotal(double netTotal) {
         this.netTotal = netTotal;
+    }
+
+    public LocalDate getPaymentDeadline() {
+        return paymentDeadline;
+    }
+
+    public void setPaymentDeadline(LocalDate paymentDeadline) {
+        this.paymentDeadline = paymentDeadline;
+    }
+
+    public boolean isPaymentCompleted() {
+        return paymentCompleted;
+    }
+
+    public void setPaymentCompleted(boolean paymentCompleted) {
+        this.paymentCompleted = paymentCompleted;
     }
 }

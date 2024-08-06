@@ -12,6 +12,7 @@ import humber.ds.toursite.repository.SiteRepository;
 import humber.ds.toursite.service.BookingService;
 import humber.ds.toursite.service.BookingState;
 import humber.ds.toursite.service.EmailService;
+import humber.ds.toursite.utils.DateCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class BookingServiceImp implements BookingService {
     private final SiteRepository siteRepository;
     private final EmailService emailService;
     private final BookingState bookingState;
+    DateCheck dateCheck = new DateCheck();
 
     @Autowired
     public BookingServiceImp(BookingRepository bookingRepository,
@@ -60,7 +62,8 @@ public class BookingServiceImp implements BookingService {
             throw new IllegalArgumentException("Checkout date must be after checkin date.");
         }
 
-        BookingStatus bookingStatus = checkAvailability(siteId, checkInDate, checkOutDate)
+        List<Booking> bookings = bookingRepository.findBySiteIdAndStatus(siteId, BookingStatus.CONFIRMED);
+        BookingStatus bookingStatus = dateCheck.checkAvailability(bookings, checkInDate, checkOutDate)
                 ? bookingState.setState(BookingStatus.PROCESSING)
                 : bookingState.setState(BookingStatus.PENDING);
 
@@ -71,6 +74,8 @@ public class BookingServiceImp implements BookingService {
         booking.setCheckOutDate(checkOutDate);
         booking.setStatus(bookingStatus);
         booking.setBookingDate(LocalDateTime.now());
+        booking.setPaymentDeadline((checkInDate.minusDays(2)));
+        booking.setPaymentCompleted(false);
 
         int nights = (int) ChronoUnit.DAYS.between(checkInDate, checkOutDate);
         booking.setTotalPrice(calculateTotalPrice(site.getPrice(), nights));
@@ -106,6 +111,7 @@ public class BookingServiceImp implements BookingService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid booking ID: " + id));
 
         booking.setStatus(bookingState.setState(BookingStatus.CANCELLED));
+        booking.setPaymentCompleted(false);
         bookingRepository.save(booking);
 
         List<Booking> waitingBookings = bookingRepository.findBySiteIdAndStatus(booking.getSiteId(),
@@ -132,18 +138,12 @@ public class BookingServiceImp implements BookingService {
         return pricePerNight * nights;
     }
 
-    private boolean checkAvailability(Long siteId, LocalDate checkInDate, LocalDate checkOutDate) {
-        List<Booking> bookings = bookingRepository.findBySiteIdAndStatus(siteId, BookingStatus.CONFIRMED);
-
-        return bookings.stream().noneMatch(booking -> (checkInDate.isBefore(booking.getCheckOutDate())
-                && checkOutDate.isAfter(booking.getCheckInDate())));
-    }
 
     private void notifyClients(List<Booking> bookings, LocalDate canceledCheckIn, LocalDate canceledCheckOut) {
         Map<Long, Client> notifiedClients = new HashMap<>();
         for (Booking booking : bookings) {
 
-            if (datesOverlap(canceledCheckIn, canceledCheckOut,
+            if (dateCheck.datesOverlap(canceledCheckIn, canceledCheckOut,
                     booking.getCheckInDate(), booking.getCheckOutDate())
                     && !notifiedClients.containsKey(booking.getClientId())) {
 
@@ -158,9 +158,5 @@ public class BookingServiceImp implements BookingService {
 //                 emailService.sendEmail(client.getEmail(), "Site Availability Notification", message);
             }
         }
-    }
-
-    private boolean datesOverlap(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-        return start1.isBefore(end2) && start2.isBefore(end1);
     }
 }
