@@ -3,6 +3,7 @@ package humber.ds.toursite.service.imp;
 import java.util.ArrayList;
 import java.util.List;
 
+import humber.ds.toursite.utils.DateCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import humber.ds.toursite.strategies.UpfrontStrategy;
 public class PaymentServiceImp implements PaymentService {
     PaymentRepository paymentRepository;
     BookingRepository bookingRepository;
+    DateCheck dateCheck = new DateCheck();
 
     @Autowired
     public PaymentServiceImp(PaymentRepository paymentRepository, BookingRepository bookingRepository) {
@@ -65,6 +67,13 @@ public class PaymentServiceImp implements PaymentService {
         // Confirm booking
         booking.setStatus(BookingStatus.CONFIRMED);
         bookingRepository.save(booking);
+
+        bookingRepository.updateOverlappingBookingsToPending(
+                booking.getSiteId(),
+                booking.getId(),
+                booking.getCheckInDate(),
+                booking.getCheckOutDate()
+        );
 
         return payments;
     }

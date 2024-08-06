@@ -35,7 +35,6 @@ public class SchedulerServiceImp implements SchedulerService {
         Map<Long, Client> notifiedClients = new HashMap<>();
 
         for (Booking booking : bookings) {
-            System.out.println(now + "--" + booking.getPaymentDeadline().minusDays(1));
             if (now.isAfter(booking.getPaymentDeadline())) {
                 booking.setStatus(BookingStatus.CANCELLED);
                 bookingRepository.save(booking);
