@@ -4,6 +4,7 @@ import { PaymentOption } from "../components/PaymentOption";
 import PaymentSummary from "../components/PaymentSummary";
 import { Checkout } from "../components/Checkout";
 import StageMarker from "../components/StageMarker";
+import Invoice from "../components/Invoice";
 
 export const Booking = () => {
   const [stage, setStage] = useState(0);
@@ -27,6 +28,8 @@ export const Booking = () => {
       case 3:
         return <Checkout data={data} next={changeStage} />;
       case 4:
+        return <Invoice data={data} next={changeStage} />;
+      case 5:
         return <>DONE!</>;
       default:
         return <>Something went wrong!</>;

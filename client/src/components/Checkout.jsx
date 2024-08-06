@@ -27,6 +27,7 @@ export const Checkout = ({ data, next }) => {
 
       next({
         payment: result,
+        tabAmount: tabAmount,
       });
     } catch (err) {
       alert(err);
