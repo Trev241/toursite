@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import { Amount } from "./Amount";
 
 const Invoice = ({ data, next }) => {
+  const navigate = useNavigate();
+
   const handleNext = () => {
-    next();
+    navigate("/");
   };
 
   return (
@@ -33,7 +36,7 @@ const Invoice = ({ data, next }) => {
               </div>
               <div>
                 <h2>To</h2>
-                <p className="text-3xl">{data.booking.checkInDate}</p>
+                <p className="text-3xl">{data.booking.checkOutDate}</p>
               </div>
             </div>
 
@@ -46,8 +49,8 @@ const Invoice = ({ data, next }) => {
                 <>
                   <h2 className="text-xl mb-2">Promotions and discounts</h2>
                   <ul>
-                    {data.booking.coupons.map((coupon) => (
-                      <li className="flex justify-between mb-2">
+                    {data.booking.coupons.map((coupon, idx) => (
+                      <li key={idx} className="flex justify-between mb-2">
                         <h2 className="text-sm">
                           Applied coupon {coupon.code}
                         </h2>
@@ -80,10 +83,11 @@ const Invoice = ({ data, next }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-end">
+
+      <div className="flex justify-end mb-4">
         <button
           onClick={handleNext}
-          className="text-sm mt-2 w-1/2 mx-auto rounded px-4 py-2 bg-green-600 hover:bg-green-500 text-white whitespace-no-wrap"
+          className="text-sm mt-2 rounded px-4 py-2 bg-green-600 hover:bg-green-500 text-white whitespace-no-wrap"
         >
           Continue
         </button>
