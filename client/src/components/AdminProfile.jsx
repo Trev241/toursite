@@ -533,6 +533,14 @@ const AdminProfile = () => {
         <DialogTitle>Add New Coupon</DialogTitle>
         <DialogContent>
           <TextField
+            name="code"
+            label="Coupon Code"
+            fullWidth
+            margin="normal"
+            value={newCoupon.code}
+            onChange={handleCouponChange}
+          />
+          <TextField
             name="discountRate"
             label="Discount Rate (%)"
             type="number"
