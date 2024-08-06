@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,7 +14,6 @@ import BookingPage from "./components/BookingPage";
 import Profile from "./components/Profile"; // Import Profile
 import AdminProfile from "./components/AdminProfile"; // Import AdminProfile
 import SignIn from "./pages/Signin";
-import { Booking } from "./components/Booking";
 import { AuthContext } from "./components/AuthProvider"; // Import AuthContext
 import { SiteProvider } from "./components/SiteContext"; // Import SiteProvider
 
