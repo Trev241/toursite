@@ -14,7 +14,7 @@ const AdminProfile = () => {
   const [activeSection, setActiveSection] = useState('all-sites');
   const [sites, setSites] = useState([]);
   const [deletedSites, setDeletedSites] = useState([]);
-  const [bookedSites, setBookedSites] = useState([]);
+  const [bookings, setBookings] = useState([]);
   const [promotions, setPromotions] = useState([]);
   const [activePromotions, setActivePromotions] = useState([]);
   const [inactivePromotions, setInactivePromotions] = useState([]);
@@ -52,15 +52,9 @@ const AdminProfile = () => {
       .catch((error) => console.error("Error fetching data:", error));
 
     // Fetch booked sites data from API
-    fetch("http://localhost:8081/api/v1/bookedSites")
+    fetch("http://localhost:8081/api/v1/bookings")
       .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setBookedSites(data);
-        } else {
-          console.error("Unexpected data format for booked sites:", data);
-        }
-      })
+      .then(data => setBookings(data))
       .catch((error) => console.error("Error fetching booked sites data:", error));
 
     // Fetch promotions data from API
@@ -310,31 +304,36 @@ const AdminProfile = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>User ID</TableCell>
-                    <TableCell>Username</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Booked Site</TableCell>
-                    <TableCell>Dates of Travel</TableCell>
-                    <TableCell>Payment Status</TableCell>
-                    <TableCell>Booked Time and Date</TableCell>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Site ID</TableCell>
+                  <TableCell>Client ID</TableCell>
+                  <TableCell>Booking Date</TableCell>
+                  <TableCell>Check-In Date</TableCell>
+                  <TableCell>Check-Out Date</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Total Price</TableCell>
+                  <TableCell>Discount</TableCell>
+                  <TableCell>Net Total</TableCell>
+                  <TableCell>Payment Deadline</TableCell>
+                  <TableCell>Payment Completed</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Array.isArray(bookedSites) && bookedSites.map((booking) => (
-                    <TableRow key={booking.id}>
-                      <TableCell>{booking.userId}</TableCell>
-                      <TableCell>{booking.username}</TableCell>
-                      <TableCell>{booking.email}</TableCell>
-                      <TableCell>{booking.siteName}</TableCell>
-                      <TableCell>{booking.datesOfTravel}</TableCell>
-                      <TableCell>
-                        <Box>
-                          <Typography>Amount Paid: ${booking.amountPaid}</Typography>
-                          <Typography>Due Amount: ${booking.dueAmount}</Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell>{booking.bookedTime}</TableCell>
-                    </TableRow>
+                  {Array.isArray(bookings) && bookings.map((booking) => (
+                     <TableRow key={booking.id}>
+                     <TableCell>{booking.id}</TableCell>
+                     <TableCell>{booking.siteId}</TableCell>
+                     <TableCell>{booking.clientId}</TableCell>
+                     <TableCell>{new Date(booking.bookingDate).toLocaleString()}</TableCell>
+                     <TableCell>{new Date(booking.checkInDate).toLocaleDateString()}</TableCell>
+                     <TableCell>{new Date(booking.checkOutDate).toLocaleDateString()}</TableCell>
+                     <TableCell>{booking.status}</TableCell>
+                     <TableCell>${booking.totalPrice}</TableCell>
+                     <TableCell>${booking.discount}</TableCell>
+                     <TableCell>${booking.netTotal}</TableCell>
+                     <TableCell>{new Date(booking.paymentDeadline).toLocaleDateString()}</TableCell>
+                     <TableCell>{booking.paymentCompleted ? "Yes" : "No"}</TableCell>
+                   </TableRow>
                   ))}
                 </TableBody>
               </Table>
@@ -533,14 +532,6 @@ const AdminProfile = () => {
       <Dialog open={openCouponForm} onClose={handleFormClose}>
         <DialogTitle>Add New Coupon</DialogTitle>
         <DialogContent>
-          <TextField
-            name="code"
-            label="Coupon Code"
-            fullWidth
-            margin="normal"
-            value={newCoupon.code}
-            onChange={handleCouponChange}
-          />
           <TextField
             name="discountRate"
             label="Discount Rate (%)"
