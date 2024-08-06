@@ -1,78 +1,161 @@
-import React, { useState } from 'react';
-import profileImage from '../assets/image_profile/noob.png'; // Adjust the path based on your file structure
-import EditProfileForm from './EditProfileForm'; // Import the EditProfileForm component
+import React, { useState , useContext } from 'react';
+import { Box, Typography, Avatar, List, ListItem, ListItemText, ListItemIcon, Divider, TextField, Button } from '@mui/material';
+import EditProfileForm from './EditProfileForm';
+import profileImage from '../assets/image_profile/noob.png';
+import EditIcon from '@mui/icons-material/Edit';
+import LockIcon from '@mui/icons-material/Lock';
+import TripOriginIcon from '@mui/icons-material/TripOrigin';
+import DownloadIcon from '@mui/icons-material/Download';
+import { AuthContext } from "./AuthProvider";
 
 const Profile = () => {
-  const [activeSection, setActiveSection] = useState(''); // Manage which section is active
+  const [activeSection, setActiveSection] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const { clientId, setClientId } = useContext(AuthContext); // setting the client id
 
   const handleSectionChange = (section) => {
     setActiveSection(section);
   };
 
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    try {
+      console.log(clientId);
+      const response = await fetch(`http://localhost:8081/api/v1/clients/${clientId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: newPassword }), // Adjust the payload as needed
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update password');
+      }
+
+      setSuccess('Password updated successfully');
+      setError('');
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
-    <div className="flex">
+    <Box display="flex">
       {/* Sidebar */}
-      <aside className="w-64 h-screen bg-gray-100 border-r border-blue-200 shadow-xl">
-        <div className="p-4">
-          {/* Profile Image */}
-          <div className="flex flex-col items-center mb-8 border-b border-blue-200 pb-4">
-            <img
-              src={profileImage}
-              alt="Profile"
-              className="w-40 h-40 rounded-full shadow-lg"
-            />
-            <h2 className="mt-4 text-xl font-semibold text-blue-800">User Name</h2>
-          </div>
-          {/* Dashboard Options */}
-          <nav>
-            <ul className="space-y-4">
-              <li className="border-b border-blue-200 pb-2">
-                <a
-                  href="#edit-profile"
-                  onClick={() => handleSectionChange('edit-profile')}
-                  className="block p-2 text-teal-700 hover:bg-teal-100 rounded transition duration-150 ease-in-out"
-                >
-                  Edit Profile
-                </a>
-              </li>
-              <li className="border-b border-blue-200 pb-2">
-                <a
-                  href="#change-password"
-                  onClick={() => handleSectionChange('change-password')}
-                  className="block p-2 text-teal-700 hover:bg-teal-100 rounded transition duration-150 ease-in-out"
-                >
-                  Change Password
-                </a>
-              </li>
-              <li className="border-b border-blue-200 pb-2">
-                <a
-                  href="#view-trips"
-                  onClick={() => handleSectionChange('view-trips')}
-                  className="block p-2 text-teal-700 hover:bg-teal-100 rounded transition duration-150 ease-in-out"
-                >
-                  View Trips
-                </a>
-              </li>
-              <li className="border-b border-blue-200 pb-2">
-                <a
-                  href="#downloads"
-                  onClick={() => handleSectionChange('downloads')}
-                  className="block p-2 text-teal-700 hover:bg-teal-100 rounded transition duration-150 ease-in-out"
-                >
-                  Downloads
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </aside>
+      <Box 
+        width={300} // Increased width
+        height="100vh" 
+        boxShadow={3}
+        display="flex" 
+        flexDirection="column" 
+        alignItems="center" 
+        padding={2}
+      >
+        <Avatar 
+          src={profileImage} 
+          alt="Profile" 
+          sx={{ width: 120, height: 120, boxShadow: 2, marginBottom: 2 }} 
+        />
+        <Typography variant="h5" color="primary.dark" gutterBottom>
+          User Name
+        </Typography>
+        <Divider sx={{ width: '100%', marginBottom: 2 }} />
+        {/* Dashboard Options */}
+        <List component="nav" sx={{ width: '100%' }}>
+          <ListItem 
+            button 
+            onClick={() => handleSectionChange('edit-profile')} 
+            sx={{ borderBottom: '1px solid #e0e0e0' }}
+          >
+            <ListItemIcon>
+              <EditIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Edit Profile" />
+          </ListItem>
+          <ListItem 
+            button 
+            onClick={() => handleSectionChange('change-password')} 
+            sx={{ borderBottom: '1px solid #e0e0e0' }}
+          >
+            <ListItemIcon>
+              <LockIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Change Password" />
+          </ListItem>
+          <ListItem 
+            button 
+            onClick={() => handleSectionChange('view-trips')} 
+            sx={{ borderBottom: '1px solid #e0e0e0' }}
+          >
+            <ListItemIcon>
+              <TripOriginIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="View Trips" />
+          </ListItem>
+          <ListItem 
+            button 
+            onClick={() => handleSectionChange('downloads')} 
+            sx={{ borderBottom: '1px solid #e0e0e0' }}
+          >
+            <ListItemIcon>
+              <DownloadIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Downloads" />
+          </ListItem>
+        </List>
+      </Box>
       
       {/* Right Section */}
-      <main className="flex-1 p-6">
+      <Box flex={1} padding={4}>
         {activeSection === 'edit-profile' && <EditProfileForm />}
-        {/* Other sections like Change Password, View Trips, and Downloads can be added here */}
-      </main>
-    </div>
+        {activeSection === 'change-password' && (
+          <Box component="form" onSubmit={handlePasswordChange} sx={{ maxWidth: 400, margin: 'auto' }}>
+            <Typography variant="h6" gutterBottom>Change Password</Typography>
+            {error && <Typography color="error">{error}</Typography>}
+            {success && <Typography color="success">{success}</Typography>}
+            <TextField
+              fullWidth
+              label="New Password"
+              type="password"
+              variant="outlined"
+              margin="normal"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              margin="normal"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+            >
+              Confirm
+            </Button>
+          </Box>
+        )}
+        {/* Other sections like View Trips and Downloads can be added here */}
+      </Box>
+    </Box>
   );
 };
 
