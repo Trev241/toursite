@@ -16,6 +16,15 @@ const Invoice = ({ data, next }) => {
 
           <div className="w-[500px] ">
             <div className="mb-4">
+              <h2 className="me-2">Billed at</h2>
+              <span className="text-3xl">
+                {new Date().toLocaleDateString() +
+                  " " +
+                  new Date().toLocaleTimeString()}
+              </span>
+            </div>
+
+            <div className="mb-4">
               <h2 className="me-2">Reservation at</h2>
               <span className="text-3xl">
                 {data.site.street}, {data.site.city}
@@ -76,7 +85,9 @@ const Invoice = ({ data, next }) => {
               <hr />
 
               <div className="flex justify-between my-2 items-end">
-                <h2 className="text-xl font-bold">Net total</h2>
+                <h2 className="text-xl font-bold">
+                  Payment received - Thank you!
+                </h2>
                 <Amount value={data.payments[0].amount} />
               </div>
             </div>
