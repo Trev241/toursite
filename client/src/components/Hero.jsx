@@ -1,5 +1,5 @@
 import React from "react";
-import desert from "../assets/desert.mp4";
+import video from "../assets/video.mp4";
 import { AiOutlineSearch } from "react-icons/ai";
 
 const Hero = () => {
@@ -7,7 +7,7 @@ const Hero = () => {
     <div className="w-full h-screen relative">
       <video
         className="w-full h-full object-cover"
-        src={desert}
+        src={video}
         autoPlay
         loop
         muted
