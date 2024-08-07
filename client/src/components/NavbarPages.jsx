@@ -3,7 +3,6 @@ import { BsPerson } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { HiOutlineMenuAlt4 } from "react-icons/hi";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 
@@ -40,15 +39,6 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
                 <Link to="/" onClick={handleNav} className={logo ? "hidden" : "block"}>
                     <h1>TOURSITE.</h1>
                 </Link>
-                <ul className="hidden md:flex ml-10">
-                    <li className="mr-6">
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li className="mr-6">Destinations</li>
-                    <li className="mr-6">Travel</li>
-                    <li className="mr-6">About</li>
-                    <li className="mr-6">Blogs</li>
-                </ul>
             </div>
             <div className="flex items-center space-x-4">
                 <BiSearch className="hidden md:block" size={20} />
@@ -95,36 +85,6 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
                 ) : (
                     <HiOutlineMenuAlt4 size={20} />
                 )}
-            </div>
-            <div
-                onClick={handleNav}
-                className={
-                    nav
-                        ? "absolute left-0 top-0 w-full bg-gray-100/90 px-4 py-7 flex flex-col"
-                        : "absolute left-[-100%]"
-                }
-            >
-                <ul>
-                    <Link to="/" onClick={handleNav}>
-                        <h1>TOURSITE.</h1>
-                    </Link>
-                    <li className="border-b">
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li className="border-b">Destinations</li>
-                    <li className="border-b">Travel</li>
-                    <li className="border-b">About</li>
-                    <li className="border-b">Blogs</li>
-                    <div className="flex flex-col">
-                        <button className="my-6">Search</button>
-                        <button onClick={onAuthModalToggle}>Account</button>
-                    </div>
-                    <div className="flex justify-around my-6">
-                        <FaGithub />
-                        <FaLinkedin />
-                        <FaTwitter />
-                    </div>
-                </ul>
             </div>
         </div>
     );
