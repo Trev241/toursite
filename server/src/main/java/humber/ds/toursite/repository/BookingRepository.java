@@ -42,12 +42,30 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "b.status, " +
             "b.netTotal, " +
             "s.city, " +
-            "s.country) " +
+            "s.country, " +
+            "s.price, " +
+            "s.id) " +
             "FROM Booking b " +
             "JOIN Site s ON b.siteId = s.id " +
             "WHERE b.clientId = :clientId " +
             "ORDER BY b.checkInDate")
     List<BookingSiteDTO> findAllByClientIdWithSiteInfo(@Param("clientId") Long clientId);
+
+
+    @Query("SELECT new humber.ds.toursite.model.BookingSiteDTO(" +
+            "b.id, " +
+            "b.checkInDate, " +
+            "b.checkOutDate, " +
+            "b.status, " +
+            "b.netTotal, " +
+            "s.city, " +
+            "s.country, " +
+            "s.price, " +
+            "s.id) " +
+            "FROM Booking b " +
+            "JOIN Site s ON b.siteId = s.id " +
+            "WHERE b.id = :bookingId ")
+    BookingSiteDTO findByBookingId(@Param("bookingId") Long bookingId);
 
 
 }

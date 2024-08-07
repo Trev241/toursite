@@ -22,25 +22,23 @@ import java.util.Map;
 
 @Service
 public class BookingServiceImp implements BookingService {
-    private final BookingRepository bookingRepository;
-    private final ClientRepository clientRepository;
-    private final SiteRepository siteRepository;
-    private final EmailService emailService;
-    private final BookingState bookingState;
-    DateCheck dateCheck = new DateCheck();
+    @Autowired
+    private BookingRepository bookingRepository;
 
     @Autowired
-    public BookingServiceImp(BookingRepository bookingRepository,
-                             ClientRepository clientRepository,
-                             SiteRepository siteRepository,
-                             EmailService emailService,
-                             BookingState bookingState) {
-        this.bookingRepository = bookingRepository;
-        this.clientRepository = clientRepository;
-        this.siteRepository = siteRepository;
-        this.emailService = emailService;
-        this.bookingState = bookingState;
-    }
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private SiteRepository siteRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private BookingState bookingState;
+
+    DateCheck dateCheck = new DateCheck();
+
 
     @Override
     public Booking one(Long id) {
@@ -131,6 +129,38 @@ public class BookingServiceImp implements BookingService {
         return bookingRepository.findAllByClientIdWithSiteInfo(clientId);
     }
 
+    @Override
+    public BookingSiteDTO getBookingDetail(Long bookingId) {
+        return bookingRepository.findByBookingId(bookingId);
+    }
+
+    @Override
+    public Booking updateBookingDate(Long bookingId, BookingUpdateDTO bookingUpdateDTO) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Invalid booking ID: " + bookingId));
+
+        List<Booking> bookings = bookingRepository.findBySiteIdAndStatus(
+                bookingUpdateDTO.getSiteId(), BookingStatus.CONFIRMED);
+        BookingStatus bookingStatus = dateCheck.checkAvailability(
+                bookings, bookingUpdateDTO.getCheckInDate(), bookingUpdateDTO.getCheckOutDate())
+                ? bookingState.setState(BookingStatus.PROCESSING)
+                : bookingState.setState(BookingStatus.PENDING);
+
+
+        booking.setCheckInDate(bookingUpdateDTO.getCheckInDate());
+        booking.setCheckOutDate(bookingUpdateDTO.getCheckOutDate());
+
+        int nights = (int) ChronoUnit.DAYS.between(bookingUpdateDTO.getCheckInDate(), bookingUpdateDTO.getCheckOutDate());
+        booking.setTotalPrice(calculateTotalPrice(bookingUpdateDTO.getPrice(), nights));
+        booking.setNetTotal(calculateTotalPrice(bookingUpdateDTO.getPrice(), nights));
+        booking.setStatus(bookingStatus);
+
+        bookingRepository.save(booking);
+        return booking;
+
+    }
+
     private double calculateTotalPrice(double pricePerNight, int nights) {
         return pricePerNight * nights;
     }
@@ -152,7 +182,7 @@ public class BookingServiceImp implements BookingService {
                 String message = String.format(
                         "Dear %s, the site you were interested in is now available from %s to %s. Please visit our website to confirm your booking.",
                         client.getUsername(), canceledCheckIn, canceledCheckOut);
-//                 emailService.sendEmail(client.getEmail(), "Site Availability Notification", message);
+                 emailService.sendEmail(client.getEmail(), "Site Availability Notification", message);
             }
         }
     }

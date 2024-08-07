@@ -17,8 +17,13 @@ public class BookingSiteDTO implements Serializable {
     private double netTotal;
     private String city;
     private String country;
+    private double price;
+    private Long siteId;
 
-    public BookingSiteDTO(Long id, LocalDate checkInDate, LocalDate checkOutDate, BookingStatus status, Double netTotal, String city, String country) {
+    public BookingSiteDTO(Long id, LocalDate checkInDate,
+                          LocalDate checkOutDate, BookingStatus status,
+                          double netTotal, String city, String country,
+                          double price, Long siteId) {
         this.id = id;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
@@ -26,6 +31,8 @@ public class BookingSiteDTO implements Serializable {
         this.netTotal = netTotal;
         this.city = city;
         this.country = country;
+        this.price = price;
+        this.siteId = siteId;
     }
 
     public Long getId() {
@@ -60,11 +67,19 @@ public class BookingSiteDTO implements Serializable {
         this.status = status;
     }
 
-    public Double getNetTotal() {
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getNetTotal() {
         return netTotal;
     }
 
-    public void setNetTotal(Double netTotal) {
+    public void setNetTotal(double netTotal) {
         this.netTotal = netTotal;
     }
 
@@ -82,5 +97,13 @@ public class BookingSiteDTO implements Serializable {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public Long getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(Long siteId) {
+        this.siteId = siteId;
     }
 }

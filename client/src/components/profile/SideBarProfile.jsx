@@ -1,5 +1,5 @@
 import React from 'react';
-import profileImage from '../assets/image_profile/noob.png';
+import profileImage from '../../assets/image_profile/noob.png';
 import { NavLink } from "react-router-dom";
 import { FaUserEdit, FaLock, FaListUl } from "react-icons/fa";
 
@@ -7,11 +7,10 @@ const SidebarProfile = () => {
     return (
         <div className="flex flex-col items-center p-6 bg-white shadow-md h-screen">
             <img
-                src={profileImage} // Replace with the path to the user's profile picture
+                src={profileImage}
                 alt="User"
                 className="w-24 h-24 rounded-full mb-6"
             />
-            <h2 className="text-xl font-bold mb-6">User Name</h2> {/* Replace with the actual user's name */}
 
             <nav className="flex flex-col space-y-4 w-full">
                 <NavLink

@@ -2,6 +2,7 @@ package humber.ds.toursite.controller;
 
 import humber.ds.toursite.model.Booking;
 import humber.ds.toursite.model.BookingSiteDTO;
+import humber.ds.toursite.model.BookingUpdateDTO;
 import humber.ds.toursite.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -54,8 +55,21 @@ public class BookingController {
     }
 
     @GetMapping(value = "/booking-all/{clientId}")
-    public ResponseEntity<List<BookingSiteDTO>> getAllProcessingBookings(@PathVariable Long clientId) {
+    public ResponseEntity<List<BookingSiteDTO>> getAllBookings(@PathVariable Long clientId) {
         List<BookingSiteDTO> bookings = bookingService.getBookingByClientId(clientId);
         return ResponseEntity.ok(bookings);
+    }
+
+    @GetMapping(value = "/booking-detail/{bookingId}")
+    public ResponseEntity<BookingSiteDTO> getBookingDetail(@PathVariable Long bookingId) {
+        return ResponseEntity.ok(bookingService.getBookingDetail(bookingId));
+    }
+
+    @PostMapping("/booking-update/{bookingId}")
+    public ResponseEntity<Booking> updateBooking(
+            @PathVariable Long bookingId,
+            @RequestBody BookingUpdateDTO bookingUpdateDTO) {
+        Booking updatedBooking = bookingService.updateBookingDate(bookingId, bookingUpdateDTO);
+        return ResponseEntity.ok(updatedBooking);
     }
 }

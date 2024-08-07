@@ -1,5 +1,3 @@
-// Navbar.jsx
-
 import React, {useContext, useState } from 'react';
 import { BsPerson } from 'react-icons/bs';
 import { BiSearch } from 'react-icons/bi';

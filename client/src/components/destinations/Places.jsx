@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { getStorage } from "firebase/storage";
 import SiteContext from "../SiteContext";
 import { getImageURL } from "../../utils/Utils";
 import DefaultRoomImage from "../../assets/default-room.jpg";

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import "font-awesome/css/font-awesome.min.css"; // Importing FontAwesome CSS
+import "font-awesome/css/font-awesome.min.css";
 import { AuthContext } from "./AuthProvider";
 import { useNavigate } from "react-router-dom";
 

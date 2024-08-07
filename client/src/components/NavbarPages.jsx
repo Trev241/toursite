@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useContext } from "react";
 import { BsPerson } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
@@ -13,6 +13,7 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const { client, logout } = useContext(AuthContext);
     const navigate = useNavigate();
+
 
     const handleNav = () => {
         setNav(!nav);
@@ -71,10 +72,7 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
                                     className="w-12 h-12 rounded-full mx-auto mb-2"
                                 />
                                 <div className="flex flex-col items-center">
-                                    <Link
-                                        to="/profile"
-                                        className="text-blue-500 hover:underline mb-2"
-                                    >
+                                    <Link to="/profile">
                                         View Profile
                                     </Link>
                                     <button
