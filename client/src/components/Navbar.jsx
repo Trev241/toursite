@@ -5,7 +5,7 @@ import {AiOutlineClose} from 'react-icons/ai';
 import {HiOutlineMenuAlt4} from 'react-icons/hi';
 import {Link, Navigate} from 'react-router-dom'; // Import Link
 import {AuthContext} from './AuthProvider';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 
 function Navbar({onAuthModalToggle, username, onLogout}) {
     const [nav, setNav] = useState(false);
