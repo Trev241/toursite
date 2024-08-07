@@ -29,8 +29,6 @@ export const Booking = () => {
         return <Checkout data={data} next={changeStage} />;
       case 4:
         return <Invoice data={data} next={changeStage} />;
-      case 5:
-        return <>DONE!</>;
       default:
         return <>Something went wrong!</>;
     }
@@ -48,7 +46,7 @@ export const Booking = () => {
           />
         ))}
       </div>
-      <div>{currentStage()}</div>
+      <div className="transition">{currentStage()}</div>
     </div>
   );
 };
