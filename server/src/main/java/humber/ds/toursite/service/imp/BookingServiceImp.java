@@ -39,7 +39,6 @@ public class BookingServiceImp implements BookingService {
 
     DateCheck dateCheck = new DateCheck();
 
-
     @Override
     public Booking one(Long id) {
         return bookingRepository.findById(id)
@@ -144,14 +143,14 @@ public class BookingServiceImp implements BookingService {
                 bookingUpdateDTO.getSiteId(), BookingStatus.CONFIRMED);
         BookingStatus bookingStatus = dateCheck.checkAvailability(
                 bookings, bookingUpdateDTO.getCheckInDate(), bookingUpdateDTO.getCheckOutDate())
-                ? bookingState.setState(BookingStatus.PROCESSING)
-                : bookingState.setState(BookingStatus.PENDING);
-
+                        ? bookingState.setState(BookingStatus.PROCESSING)
+                        : bookingState.setState(BookingStatus.PENDING);
 
         booking.setCheckInDate(bookingUpdateDTO.getCheckInDate());
         booking.setCheckOutDate(bookingUpdateDTO.getCheckOutDate());
 
-        int nights = (int) ChronoUnit.DAYS.between(bookingUpdateDTO.getCheckInDate(), bookingUpdateDTO.getCheckOutDate());
+        int nights = (int) ChronoUnit.DAYS.between(bookingUpdateDTO.getCheckInDate(),
+                bookingUpdateDTO.getCheckOutDate());
         booking.setTotalPrice(calculateTotalPrice(bookingUpdateDTO.getPrice(), nights));
         booking.setNetTotal(calculateTotalPrice(bookingUpdateDTO.getPrice(), nights));
         booking.setStatus(bookingStatus);
@@ -164,7 +163,6 @@ public class BookingServiceImp implements BookingService {
     private double calculateTotalPrice(double pricePerNight, int nights) {
         return pricePerNight * nights;
     }
-
 
     private void notifyClients(List<Booking> bookings, LocalDate canceledCheckIn, LocalDate canceledCheckOut) {
         Map<Long, Client> notifiedClients = new HashMap<>();
@@ -182,7 +180,7 @@ public class BookingServiceImp implements BookingService {
                 String message = String.format(
                         "Dear %s, the site you were interested in is now available from %s to %s. Please visit our website to confirm your booking.",
                         client.getUsername(), canceledCheckIn, canceledCheckOut);
-                 emailService.sendEmail(client.getEmail(), "Site Availability Notification", message);
+                emailService.sendEmail(client.getEmail(), "Site Availability Notification", message);
             }
         }
     }

@@ -10,7 +10,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import Modal from "react-modal";
 import { API_BASE_URL } from "../constants/Constants";
 import { AuthContext } from "./AuthProvider";
-import Img1 from "./../assets/places/boat.jpg";
 
 import "./BookingPage.css";
 import { getImageURL } from "../utils/Utils";
@@ -96,7 +95,7 @@ const BookingPage = () => {
 
       if (booking.status === "PENDING") {
         setModalMessage(
-          "The booking's already occupied and your booking is added to the wishlists. When the guest cancels the trip, we will send you a notification through email."
+          "This site has already been reserved for one or more date(s) that you have chosen. You have been placed on a waiting list for now. We will send you an email once the location is available again."
         );
         setModalIsOpen(true);
       } else {
