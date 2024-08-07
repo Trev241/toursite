@@ -6,6 +6,7 @@ import { HiOutlineMenuAlt4 } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 
+
 function NavbarPages({ onAuthModalToggle, username, isHeader }) {
     const [nav, setNav] = useState(false);
     const [logo, setLogo] = useState(false);
@@ -28,6 +29,8 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
         setDropdownOpen(false);
         navigate("/"); // Redirect to home page
     };
+       // Determine the profile link based on the client's role
+       const profileLink = client?.role === 'admin' ? '/admin-profile' : '/profile';
 
     return (
         <div
@@ -62,7 +65,7 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
                                     className="w-12 h-12 rounded-full mx-auto mb-2"
                                 />
                                 <div className="flex flex-col items-center">
-                                    <Link to="/profile">
+                                    <Link to={profileLink}>
                                         View Profile
                                     </Link>
                                     <button

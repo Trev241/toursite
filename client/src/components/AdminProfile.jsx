@@ -80,16 +80,16 @@ const AdminProfile = () => {
             .catch((error) => console.error("Error fetching booked sites data:", error));
 
         // Fetch promotions data from API
-        fetch("http://localhost:8081/api/v1/promotions")
-            .then((response) => response.json())
-            .then((data) => {
-                const active = data.filter(promo => !promo.redeemed);
-                const inactive = data.filter(promo => promo.redeemed);
-                setActivePromotions(active);
-                setInactivePromotions(inactive);
-                setPromotions(data);
-            })
-            .catch((error) => console.error("Error fetching promotions data:", error));
+        // fetch("http://localhost:8081/api/v1/promotions")
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         const active = data.filter(promo => !promo.redeemed);
+        //         const inactive = data.filter(promo => promo.redeemed);
+        //         setActivePromotions(active);
+        //         setInactivePromotions(inactive);
+        //         setPromotions(data);
+        //     })
+        //     .catch((error) => console.error("Error fetching promotions data:", error));
 
         // Fetch coupons data from API
         fetch("http://localhost:8081/api/v1/coupons")

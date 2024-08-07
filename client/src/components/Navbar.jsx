@@ -1,18 +1,18 @@
-import React, {useContext, useState} from 'react';
-import {BsPerson} from 'react-icons/bs';
-import {BiSearch} from 'react-icons/bi';
-import {AiOutlineClose} from 'react-icons/ai';
-import {HiOutlineMenuAlt4} from 'react-icons/hi';
-import {Link, Navigate} from 'react-router-dom'; // Import Link
-import {AuthContext} from './AuthProvider';
-import {  useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { BsPerson } from 'react-icons/bs';
+import { BiSearch } from 'react-icons/bi';
+import { AiOutlineClose } from 'react-icons/ai';
+import { HiOutlineMenuAlt4 } from 'react-icons/hi';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from './AuthProvider';
 
-function Navbar({onAuthModalToggle, username, onLogout}) {
+function Navbar({ onAuthModalToggle, username, onLogout }) {
     const [nav, setNav] = useState(false);
     const [logo, setLogo] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const {client , logout} = useContext(AuthContext);
+    const { client, logout } = useContext(AuthContext);
     const navigate = useNavigate();
+
     const handleNav = () => {
         setNav(!nav);
         setLogo(!logo);
@@ -21,12 +21,15 @@ function Navbar({onAuthModalToggle, username, onLogout}) {
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
-    const handleLogout = () =>{
+
+    const handleLogout = () => {
         logout();
         setDropdownOpen(false);
-        navigate("/") // redirecting to the home page 
+        navigate("/"); // Redirect to the home page
     };
-    
+
+    // Determine the profile link based on the client's role
+    const profileLink = client?.role === 'admin' ? '/admin-profile' : '/profile';
 
     return (
         <div className='flex w-full justify-between items-center h-20 px-4 absolute z-10 text-white'>
@@ -47,10 +50,11 @@ function Navbar({onAuthModalToggle, username, onLogout}) {
                             <div
                                 className='absolute top-full right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg p-4'>
                                 <div className='flex flex-col items-center'>
-                                    <Link to="/profile" className='text-blue-500 hover:underline mb-2'>View
-                                        Profile</Link>
+                                    <Link to={profileLink} className='text-blue-500 hover:underline mb-2'>
+                                        View Profile
+                                    </Link>
                                     <button
-                                        onClick={handleLogout} // Call handleLogout instead
+                                        onClick={handleLogout}
                                         className="text-red-500 hover:underline"
                                     >
                                         Logout
@@ -62,7 +66,7 @@ function Navbar({onAuthModalToggle, username, onLogout}) {
                 )}
             </div>
 
-            {/* mobile menu */}
+            {/* Mobile menu */}
             <div onClick={handleNav} className='md:hidden z-10'>
                 {nav ? <AiOutlineClose className='text-black' size={20}/> : <HiOutlineMenuAlt4 size={20}/>}
             </div>
