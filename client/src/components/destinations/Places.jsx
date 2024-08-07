@@ -1,6 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { getStorage } from "firebase/storage";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import SiteContext from "../SiteContext";
 import { getImageURL } from "../../utils/Utils";
 import DefaultRoomImage from "../../assets/default-room.jpg";
@@ -8,8 +7,8 @@ import { Amount } from "../Amount";
 
 const Places = () => {
   const navigate = useNavigate();
-  const storage = getStorage();
   const { sites, setSites } = useContext(SiteContext);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     // Fetch data from API
@@ -22,10 +21,17 @@ const Places = () => {
               ? await getImageURL(item.photos[0].url)
               : null;
 
-        setSites(data);
+
+        const filteredSites = data.filter((item) => {
+          let query = new RegExp(searchParams.get("destination"), "i");
+          console.log(item.street);
+          return query.test(item.street) || query.test(item.city) || query.test(item.country)
+        })
+        console.log(filteredSites);
+        setSites(filteredSites);
       })
       .catch((error) => console.error("Error fetching data:", error));
-  }, [setSites]);
+  }, [setSites, searchParams]);
 
   const handleBookClick = (place) => {
     navigate(`/booking?siteId=${place.id}`);
