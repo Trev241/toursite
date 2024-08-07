@@ -14,8 +14,8 @@ const Hero = () => {
       />
       <div className="absolute w-full h-full top-0 left-0 bg-gray-900/30">
         <div className="absolute top-0 w-full h-full flex flex-col justify-center text-center text-white p-4 ">
-          <h1>Content to be added</h1>
-          <form className="flex justify-between items-center max-w-[500px] max-h-[40px] mx-auto w-full border p-1 rounded-md text-black bg-gray-100/85">
+          <h1 className="text-8xl animation-bounce">Let's take a tour</h1>
+          {/* <form className="flex justify-between items-center max-w-[500px] max-h-[40px] mx-auto w-full border p-1 rounded-md text-black bg-gray-100/85">
             <div>
               <input
                 className="bg-transparent w-[200px] sm:w-[300px] font-[Poppins] focus:outline-none"
@@ -32,7 +32,7 @@ const Hero = () => {
                 />
               </button>
             </div>
-          </form>
+          </form> */}
         </div>
       </div>
     </div>

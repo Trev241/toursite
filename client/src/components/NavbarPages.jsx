@@ -33,7 +33,7 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
     <div
       className={`${
         location.pathname === "/"
-          ? "bg-transparent absolute z-50"
+          ? "bg-transparent absolute z-50 text-white"
           : "shadow-md bg-white"
       } flex w-full justify-between items-center p-4`}
     >
