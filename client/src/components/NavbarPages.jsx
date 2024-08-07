@@ -4,14 +4,14 @@ import { BiSearch } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { HiOutlineMenuAlt4 } from "react-icons/hi";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
-
 
 function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
     const [nav, setNav] = useState(false);
     const [logo, setLogo] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const { client} = useContext(AuthContext); // setting the client id
+    const { client } = useContext(AuthContext);
 
     const handleNav = () => {
         setNav(!nav);
@@ -29,11 +29,13 @@ function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
             } ${isHeader ? "text-black" : "text-white"}`}
         >
             <div className="flex items-center">
-                <h1 onClick={handleNav} className={logo ? "hidden" : "block"}>
-                    TOURSITE.
-                </h1>
+                <Link to="/" onClick={handleNav} className={logo ? "hidden" : "block"}>
+                    <h1>TOURSITE.</h1>
+                </Link>
                 <ul className="hidden md:flex ml-10">
-                    <li className="mr-6">Home</li>
+                    <li className="mr-6">
+                        <Link to="/">Home</Link>
+                    </li>
                     <li className="mr-6">Destinations</li>
                     <li className="mr-6">Travel</li>
                     <li className="mr-6">About</li>
@@ -62,12 +64,12 @@ function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
                                     className="w-12 h-12 rounded-full mx-auto mb-2"
                                 />
                                 <div className="flex flex-col items-center">
-                                    <a
-                                        href="/profile"
+                                    <Link
+                                        to="/profile"
                                         className="text-blue-500 hover:underline mb-2"
                                     >
                                         View Profile
-                                    </a>
+                                    </Link>
                                     <button
                                         onClick={() => {
                                             onLogout(); // Call the logout function
@@ -101,8 +103,12 @@ function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
                 }
             >
                 <ul>
-                    <h1>TOURSITE.</h1>
-                    <li className="border-b">Home</li>
+                    <Link to="/" onClick={handleNav}>
+                        <h1>TOURSITE.</h1>
+                    </Link>
+                    <li className="border-b">
+                        <Link to="/">Home</Link>
+                    </li>
                     <li className="border-b">Destinations</li>
                     <li className="border-b">Travel</li>
                     <li className="border-b">About</li>
