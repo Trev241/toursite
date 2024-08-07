@@ -4,14 +4,15 @@ import { BiSearch } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { HiOutlineMenuAlt4 } from "react-icons/hi";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 
-function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
+function NavbarPages({ onAuthModalToggle, username, isHeader }) {
     const [nav, setNav] = useState(false);
     const [logo, setLogo] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const { client } = useContext(AuthContext);
+    const { client, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleNav = () => {
         setNav(!nav);
@@ -20,6 +21,12 @@ function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
+    };
+
+    const handleLogout = () => {
+        logout();
+        setDropdownOpen(false);
+        navigate("/"); // Redirect to home page
     };
 
     return (
@@ -51,7 +58,7 @@ function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
                         className="cursor-pointer"
                     />
                 </div>
-                {client && (
+                {client && client.email && (
                     <div className="relative">
                         <div className="cursor-pointer" onClick={toggleDropdown}>
                             <h2 className="text-sm">{client.email}</h2>
@@ -71,10 +78,7 @@ function NavbarPages({ onAuthModalToggle, username, onLogout, isHeader }) {
                                         View Profile
                                     </Link>
                                     <button
-                                        onClick={() => {
-                                            onLogout(); // Call the logout function
-                                            setDropdownOpen(false); // Close the dropdown
-                                        }}
+                                        onClick={handleLogout} // Call handleLogout instead
                                         className="text-red-500 hover:underline"
                                     >
                                         Logout

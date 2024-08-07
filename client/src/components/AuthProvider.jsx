@@ -7,8 +7,14 @@ export const AuthProvider = ({ children }) => {
   const [client, setClient] = useState({});
   const [bookings, setBookings] = useState([]);
 
+  const logout = () => {
+    setClientId(null);
+    setClient({});
+    setBookings([]);
+  };
+
   return (
-    <AuthContext.Provider value={{ clientId, setClientId, client, setClient, bookings, setBookings }}>
+    <AuthContext.Provider value={{ clientId, setClientId, client, setClient, bookings, setBookings, logout }}>
       {children}
     </AuthContext.Provider>
   );
