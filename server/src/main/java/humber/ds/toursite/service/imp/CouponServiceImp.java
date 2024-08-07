@@ -2,6 +2,9 @@ package humber.ds.toursite.service.imp;
 
 import java.util.List;
 
+import humber.ds.toursite.model.Client;
+import humber.ds.toursite.repository.ClientRepository;
+import humber.ds.toursite.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +17,16 @@ import humber.ds.toursite.service.CouponService;
 public class CouponServiceImp implements CouponService {
     CouponRepository couponRepository;
     BookingService bookingService;
+    EmailService emailService;
+    ClientRepository clientRepository;
 
     @Autowired
-    public CouponServiceImp(CouponRepository couponRepository, BookingService bookingService) {
+    public CouponServiceImp(CouponRepository couponRepository, BookingService bookingService,
+                            EmailService emailService, ClientRepository clientRepository) {
         this.couponRepository = couponRepository;
         this.bookingService = bookingService;
+        this.emailService = emailService;
+        this.clientRepository = clientRepository;
     }
 
     @Override
@@ -28,6 +36,19 @@ public class CouponServiceImp implements CouponService {
 
     @Override
     public Coupon saveCoupon(Coupon newCoupon) {
+        List<String> emails = clientRepository.findAllClientEmails();
+        String message = String.format(
+                "Dear our traveller, use this coupon %s to %s off and enjoy your holidays",
+                newCoupon.getCode(), newCoupon.getDiscountRate()
+        );
+        for (String email : emails) {
+            emailService.sendEmail(
+                    email,
+                    "Enjoy New Coupon",
+                    message
+            );
+        }
+
         return couponRepository.save(newCoupon);
     }
 
