@@ -3,7 +3,7 @@ import { BsPerson } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { HiOutlineMenuAlt4 } from "react-icons/hi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 
 function NavbarPages({ onAuthModalToggle, username, isHeader }) {
@@ -11,7 +11,11 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
   const [logo, setLogo] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { client, logout } = useContext(AuthContext);
+
   const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(location.pathname);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -27,7 +31,11 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
 
   return (
     <div
-      className={`bg-transparent shadow-md flex w-full justify-between items-center p-5`}
+      className={`${
+        location.pathname === "/"
+          ? "bg-transparent absolute z-50"
+          : "shadow-md bg-white"
+      } flex w-full justify-between items-center p-4`}
     >
       <div className="flex items-center">
         <Link to="/" onClick={() => navigate("/")}>
@@ -36,6 +44,7 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
           </div>
         </Link>
       </div>
+
       <div className="flex items-center space-x-4">
         <BiSearch className="hidden md:block" size={20} />
         <div className="relative">
