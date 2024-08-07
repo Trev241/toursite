@@ -4,6 +4,7 @@ import { getStorage } from "firebase/storage";
 import SiteContext from "../SiteContext";
 import { getImageURL } from "../../utils/Utils";
 import DefaultRoomImage from "../../assets/default-room.jpg";
+import { Amount } from "../Amount";
 
 const Places = () => {
   const navigate = useNavigate();
@@ -59,11 +60,9 @@ const Places = () => {
                 <p className="text-gray-600 mb-2">{item.phone}</p>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold mb-4">
-                  ${item.price.toFixed(2)}
-                </div>
+                <Amount value={item.price} />
                 <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 mt-2"
                   onClick={() => handleBookClick(item)}
                 >
                   Book
