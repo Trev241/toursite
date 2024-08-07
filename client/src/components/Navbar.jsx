@@ -3,14 +3,16 @@ import {BsPerson} from 'react-icons/bs';
 import {BiSearch} from 'react-icons/bi';
 import {AiOutlineClose} from 'react-icons/ai';
 import {HiOutlineMenuAlt4} from 'react-icons/hi';
-import {Link} from 'react-router-dom'; // Import Link
+import {Link, Navigate} from 'react-router-dom'; // Import Link
 import {AuthContext} from './AuthProvider';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar({onAuthModalToggle, username, onLogout}) {
     const [nav, setNav] = useState(false);
     const [logo, setLogo] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const {client} = useContext(AuthContext);
+    const {client , logout} = useContext(AuthContext);
+    const navigate = useNavigate();
     const handleNav = () => {
         setNav(!nav);
         setLogo(!logo);
@@ -19,6 +21,12 @@ function Navbar({onAuthModalToggle, username, onLogout}) {
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
+    const handleLogout = () =>{
+        logout();
+        setDropdownOpen(false);
+        navigate("/") // redirecting to the home page 
+    };
+    
 
     return (
         <div className='flex w-full justify-between items-center h-20 px-4 absolute z-10 text-white'>
@@ -42,11 +50,8 @@ function Navbar({onAuthModalToggle, username, onLogout}) {
                                     <Link to="/profile" className='text-blue-500 hover:underline mb-2'>View
                                         Profile</Link>
                                     <button
-                                        // onClick={() => {
-                                        //     onLogout(); // Call the logout function
-                                        //     setDropdownOpen(false); // Close the dropdown
-                                        // }}
-                                        className='text-red-500 hover:underline'
+                                        onClick={handleLogout} // Call handleLogout instead
+                                        className="text-red-500 hover:underline"
                                     >
                                         Logout
                                     </button>
