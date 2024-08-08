@@ -189,7 +189,7 @@ const BookingPage = () => {
           </p>
           <div className="text-lg text-gray-600 space-y-2">
             <p>
-              <strong>Address:</strong> {site?.street || place?.street + site?.city || place?.city + site?.zip || place?.zip  }
+              <strong>Address:</strong> {site?.street  + site?.city  + site?.zip  }
             </p>
             <p>
               <strong>Phone:</strong> {site?.phone || "not provided" }
