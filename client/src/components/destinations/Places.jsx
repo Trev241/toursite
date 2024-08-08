@@ -52,11 +52,11 @@ const Places = () => {
     <div className="dark:bg-white dark:text-black bg-gray-50 py-10">
       <section className="container mx-auto max-w-screen-xl px-4">
         <h1 className="my-8 py-2 text-6xl">We recommend checking out...</h1>
-        <div className="flex flex-wrap">
+        <div className="">
           {sites.map((item) => (
             <div
               key={item.id}
-              className="flex shrink-0 items-center bg-white shadow-lg p-6 rounded-lg border border-gray-200"
+              className="flex items-center bg-white shadow-lg p-6 rounded-lg border border-gray-200"
             >
               <div className="w-64 h-40 flex items-center justify-center overflow-hidden rounded-md border border-gray-300">
                 <img
