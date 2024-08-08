@@ -36,7 +36,7 @@ export const Booking = () => {
 
   return (
     <div className="container mx-auto">
-      <div class="relative flex pt-8 pb-12 items-center">
+      <div class="print:hidden relative flex pt-8 pb-12 items-center">
         {stages.map((s, idx) => (
           <StageMarker
             key={idx}

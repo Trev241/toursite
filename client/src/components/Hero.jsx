@@ -13,13 +13,11 @@ const Hero = () => {
   let intervalTask;
 
   useEffect(() => {
-    if (!intervalTask)
+    if (!intervalTask && sites.length > 0)
       intervalTask = setInterval(() => {
-        console.log(sites[Math.floor(Math.random() * sites.length)]);
-        setDestinationPlaceholder(
-          sites[Math.floor(Math.random() * sites.length)].city
-        );
-      }, 5000);
+        let placeholder = sites[Math.floor(Math.random() * sites.length)].city;
+        setDestinationPlaceholder(placeholder);
+      }, 7000);
   }, []);
 
   return (
@@ -43,10 +41,10 @@ const Hero = () => {
               Get started by typing in your dream destination.
             </p>
           </div>
-          <form className="flex max-w-[500px] max-h-[45px] ms-1 w-full border rounded-md text-black bg-gray-100/85">
+          <form className="flex justify-start px-1">
             <div>
               <input
-                className="bg-transparent focus:outline-none p-2"
+                className="w-96 bg-white text-black border-gray-200 focus:outline-none rounded p-2"
                 type="text"
                 placeholder={destinationPlaceholder}
                 value={query}
