@@ -53,7 +53,7 @@ public class ClientController {
         return clientService.one(id);
     }
 
-    @PutMapping("/clients/{id}")
+    @PostMapping("/clients/{id}")
     Client replaceClient(@RequestBody Client newClient, @PathVariable Long id) {
         return clientService.replaceClient(newClient, id);
     }
