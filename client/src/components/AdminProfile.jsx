@@ -152,6 +152,31 @@ const AdminProfile = () => {
             [event.target.name]: event.target.value
         });
     };
+    
+
+    const getStatusColor = (status) => {
+        switch (status) {
+          case 'PENDING':
+            return 'red';
+          case 'PROCESSING':
+            return 'orange';
+          case 'CONFIRMED':
+            return 'green';
+          default:
+            return 'black'; // Default color if status is not recognized
+        }
+      };
+      const printTable = () => {
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Print Table</title>');
+        printWindow.document.write('<style>table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 8px; text-align: center; } th { font-weight: bold; }</style>');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(document.getElementById('printableTable').innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+      };
 
     const handleSubmitSite = () => {
         fetch("http://localhost:8081/api/v1/sites", {
@@ -324,45 +349,56 @@ const AdminProfile = () => {
                 {activeSection === 'booked-sites' && (
                      <Box sx={{ p: 3, bgcolor: 'background.paper', boxShadow: 3, borderRadius: 2 }}>
                      <Typography variant="h6" gutterBottom sx={{ mb: 2, fontWeight: 'bold', color: 'text.primary' }}>
-                         Booked Sites
+                       Booked Sites
                      </Typography>
-                     <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
+                     <button onClick={printTable}  className="w-40 p-3 bg-blue-500 text-black rounded-md hover:bg-blue-600 transition-colors duration-300" style={{
+                            backgroundColor: "#3490dc", // Blue color
+                            color: "white",
+                            fontWeight: "bold",
+                            fontSize: "1rem",
+                            textShadow: "1px 1px 2px rgba(255, 255, 255, 0.2)"
+                        }}>
+                       Print Report
+                     </button>
+                     <div id="printableTable">
+                       <TableContainer component={Paper} sx={{ maxHeight: 540 }}>
                          <Table stickyHeader aria-label="booked sites table">
-                             <TableHead>
-                                 <TableRow>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Site ID</TableCell>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Client ID</TableCell>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Booking Date</TableCell>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Check-In Date</TableCell>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Check-Out Date</TableCell>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Status</TableCell>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Total Price</TableCell>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Discount</TableCell>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Net Total</TableCell>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Payment Deadline</TableCell>
-                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Payment Completed</TableCell>
-                                 </TableRow>
-                             </TableHead>
-                             <TableBody>
-                                 {Array.isArray(bookings) && bookings.map((booking) => (
-                                     <TableRow key={booking.id} hover>
-                                         <TableCell align="center">{booking.siteId}</TableCell>
-                                         <TableCell align="center">{booking.clientId}</TableCell>
-                                         <TableCell align="center">{new Date(booking.bookingDate).toLocaleString()}</TableCell>
-                                         <TableCell align="center">{new Date(booking.checkInDate).toLocaleDateString()}</TableCell>
-                                         <TableCell align="center">{new Date(booking.checkOutDate).toLocaleDateString()}</TableCell>
-                                         <TableCell align="center">{booking.status}</TableCell>
-                                         <TableCell align="center">${booking.totalPrice}</TableCell>
-                                         <TableCell align="center">${booking.discount}</TableCell>
-                                         <TableCell align="center">${booking.netTotal}</TableCell>
-                                         <TableCell align="center">{new Date(booking.paymentDeadline).toLocaleDateString()}</TableCell>
-                                         <TableCell align="center">{booking.paymentCompleted ? "Yes" : "No"}</TableCell>
-                                     </TableRow>
-                                 ))}
-                             </TableBody>
+                           <TableHead>
+                             <TableRow>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Site ID</TableCell>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Client ID</TableCell>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Booking Date</TableCell>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Check-In Date</TableCell>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Check-Out Date</TableCell>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Total Price</TableCell>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Discount</TableCell>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Net Total</TableCell>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Payment Deadline</TableCell>
+                               <TableCell align="center" sx={{ fontWeight: 'bold' }}>Payment Completed</TableCell>
+                             </TableRow>
+                           </TableHead>
+                           <TableBody>
+                             {Array.isArray(bookings) && bookings.map((booking) => (
+                               <TableRow key={booking.id} hover>
+                                 <TableCell align="center">{booking.siteId}</TableCell>
+                                 <TableCell align="center">{booking.clientId}</TableCell>
+                                 <TableCell align="center">{new Date(booking.bookingDate).toLocaleString()}</TableCell>
+                                 <TableCell align="center">{new Date(booking.checkInDate).toLocaleDateString()}</TableCell>
+                                 <TableCell align="center">{new Date(booking.checkOutDate).toLocaleDateString()}</TableCell>
+                                 <TableCell align="center" style={{ color: getStatusColor(booking.status) }}>{booking.status}</TableCell>
+                                 <TableCell align="center">${booking.totalPrice}</TableCell>
+                                 <TableCell align="center">${booking.discount}</TableCell>
+                                 <TableCell align="center">${booking.netTotal}</TableCell>
+                                 <TableCell align="center">{new Date(booking.paymentDeadline).toLocaleDateString()}</TableCell>
+                                 <TableCell align="center">{booking.paymentCompleted ? "Yes" : "No"}</TableCell>
+                               </TableRow>
+                             ))}
+                           </TableBody>
                          </Table>
-                     </TableContainer>
-                 </Box>
+                       </TableContainer>
+                     </div>
+                   </Box>
                 )}
 
                 {/* {activeSection === 'promotions' && (
