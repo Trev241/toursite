@@ -2,23 +2,43 @@ import React, { useContext, useEffect, useState } from "react";
 import video from "../assets/video.mp4";
 import { useSearchParams } from "react-router-dom";
 import SiteContext from "./SiteContext";
+import { API_BASE_URL } from "../constants/Constants";
 
 const Hero = () => {
   const [query, setQuery] = useState("");
   const [_, setSearchParams] = useSearchParams();
   const [destinationPlaceholder, setDestinationPlaceholder] =
     useState("Toronto");
-  const { sites } = useContext(SiteContext);
+  const { setSites } = useContext(SiteContext);
 
   let intervalTask;
 
   useEffect(() => {
-    if (!intervalTask && sites.length > 0)
-      intervalTask = setInterval(() => {
-        let placeholder = sites[Math.floor(Math.random() * sites.length)].city;
-        setDestinationPlaceholder(placeholder);
-      }, 7000);
+    (async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/sites`);
+        const sites = await response.json();
+        setSites(sites);
+
+        if (!intervalTask && sites.length > 0)
+          intervalTask = setInterval(() => {
+            let placeholder =
+              sites[Math.floor(Math.random() * sites.length)].city;
+            setDestinationPlaceholder(placeholder);
+          }, 7000);
+      } catch (err) {
+        alert(err);
+      }
+    })();
   }, []);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setQuery(e.target.value);
+    setSearchParams({
+      destination: e.target.value,
+    });
+  };
 
   return (
     <div className="w-full h-screen relative">
@@ -41,20 +61,17 @@ const Hero = () => {
               Get started by typing in your dream destination.
             </p>
           </div>
-          <form className="flex justify-start px-1 ml-5">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="flex justify-start px-1 ml-5"
+          >
             <div>
               <input
                 className="w-96 bg-white text-black border-gray-200 focus:outline-none rounded p-2"
                 type="text"
                 placeholder={destinationPlaceholder}
                 value={query}
-                onChange={(e) => {
-                  e.preventDefault();
-                  setQuery(e.target.value);
-                  setSearchParams({
-                    destination: e.target.value,
-                  });
-                }}
+                onChange={handleSearch}
               />
             </div>
           </form>
