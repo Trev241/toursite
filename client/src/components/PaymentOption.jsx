@@ -26,15 +26,16 @@ export const PaymentOption = ({data, next}) => {
                     paymentMode: Number(paymentMethod),
                 }),
             });
-            payments = await response.json()
-            if (!payments.ok) {
+
+            if (response.status === 400) {
                 Swal.fire({
                     title: 'Failed',
-                    text: 'Sorry, ',
+                    text: 'Sorry, this site has already been reserved.',
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 });
             } else {
+                payments = await response.json()
                 next({
                     paymentMethod,
                     payments,
