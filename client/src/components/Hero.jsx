@@ -2,22 +2,34 @@ import React, { useContext, useEffect, useState } from "react";
 import video from "../assets/video.mp4";
 import { useSearchParams } from "react-router-dom";
 import SiteContext from "./SiteContext";
+import { API_BASE_URL } from "../constants/Constants";
 
 const Hero = () => {
   const [query, setQuery] = useState("");
   const [_, setSearchParams] = useSearchParams();
   const [destinationPlaceholder, setDestinationPlaceholder] =
     useState("Toronto");
-  const { sites } = useContext(SiteContext);
+  const { sites, setSites } = useContext(SiteContext);
 
   let intervalTask;
 
   useEffect(() => {
-    if (!intervalTask && sites.length > 0)
-      intervalTask = setInterval(() => {
-        let placeholder = sites[Math.floor(Math.random() * sites.length)].city;
-        setDestinationPlaceholder(placeholder);
-      }, 7000);
+    (async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/sites`);
+        const sites = await response.json();
+        setSites(sites);
+
+        if (!intervalTask && sites.length > 0)
+          intervalTask = setInterval(() => {
+            let placeholder =
+              sites[Math.floor(Math.random() * sites.length)].city;
+            setDestinationPlaceholder(placeholder);
+          }, 7000);
+      } catch (err) {
+        alert(err);
+      }
+    })();
   }, []);
 
   return (
