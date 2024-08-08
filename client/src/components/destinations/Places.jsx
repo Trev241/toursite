@@ -1,9 +1,9 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SiteContext from "../SiteContext";
-import { getImageURL } from "../../utils/Utils";
 import DefaultRoomImage from "../../assets/default-room.jpg";
 import { Amount } from "../Amount";
+import firebaseConnection from "../../utils/Firebase";
 
 const Places = () => {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Places = () => {
         for (const item of data) {
           item.url =
             item.photos.length > 0
-              ? await getImageURL(item.photos[0].url)
+              ? await firebaseConnection.getImageURL(item.photos[0].url)
               : null;
         }
         setAllSites(data);

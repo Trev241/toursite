@@ -10,9 +10,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import Modal from "react-modal";
 import { API_BASE_URL } from "../constants/Constants";
 import { AuthContext } from "./AuthProvider";
-import { getImageURL } from "../utils/Utils";
 import DefaultRoomImage from "../assets/default-room.jpg";
 import { Amount } from "./Amount";
+import firebaseConnection from "../utils/Firebase";
 
 Modal.setAppElement("#root");
 
@@ -40,7 +40,9 @@ const BookingPage = () => {
         const siteData = await response.json();
 
         const imageUrls = await Promise.all(
-          siteData.photos.map((photo) => getImageURL(photo.url))
+          siteData.photos.map((photo) =>
+            firebaseConnection.getImageURL(photo.url)
+          )
         );
 
         setImages(imageUrls);

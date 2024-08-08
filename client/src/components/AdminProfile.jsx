@@ -31,8 +31,8 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import AddIcon from "@mui/icons-material/Add";
 import { AuthContext } from "./AuthProvider";
 import SiteContext from "./SiteContext"; // Import SiteContext
-import { uploadFile } from "../utils/Utils";
 import { API_BASE_URL } from "../constants/Constants";
+import firebaseConnection from "../utils/Firebase";
 
 const AdminProfile = () => {
   const [activeSection, setActiveSection] = useState("all-sites");
@@ -177,7 +177,7 @@ const AdminProfile = () => {
   };
 
   const handleSubmitSite = () => {
-    uploadFile(newSite.photos).then((photoUrls) => {
+    firebaseConnection.uploadFile(newSite.photos).then((photoUrls) => {
       delete newSite.photos;
 
       fetch("http://localhost:8081/api/v1/sites", {
