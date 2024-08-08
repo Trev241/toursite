@@ -322,47 +322,47 @@ const AdminProfile = () => {
                 )}
 
                 {activeSection === 'booked-sites' && (
-                    <Box>
-                        <Typography variant="h6" gutterBottom>Booked Sites</Typography>
-                        <TableContainer component={Paper}>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-
-                                        <TableCell>Site ID</TableCell>
-                                        <TableCell>Client ID</TableCell>
-                                        <TableCell>Booking Date</TableCell>
-                                        <TableCell>Check-In Date</TableCell>
-                                        <TableCell>Check-Out Date</TableCell>
-                                        <TableCell>Status</TableCell>
-                                        <TableCell>Total Price</TableCell>
-                                        <TableCell>Discount</TableCell>
-                                        <TableCell>Net Total</TableCell>
-                                        <TableCell>Payment Deadline</TableCell>
-                                        <TableCell>Payment Completed</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {Array.isArray(bookings) && bookings.map((booking) => (
-                                        <TableRow key={booking.id}>
-
-                                            <TableCell>{booking.siteId}</TableCell>
-                                            <TableCell>{booking.clientId}</TableCell>
-                                            <TableCell>{new Date(booking.bookingDate).toLocaleString()}</TableCell>
-                                            <TableCell>{new Date(booking.checkInDate).toLocaleDateString()}</TableCell>
-                                            <TableCell>{new Date(booking.checkOutDate).toLocaleDateString()}</TableCell>
-                                            <TableCell>{booking.status}</TableCell>
-                                            <TableCell>${booking.totalPrice}</TableCell>
-                                            <TableCell>${booking.discount}</TableCell>
-                                            <TableCell>${booking.netTotal}</TableCell>
-                                            <TableCell>{new Date(booking.paymentDeadline).toLocaleDateString()}</TableCell>
-                                            <TableCell>{booking.paymentCompleted ? "Yes" : "No"}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Box>
+                     <Box sx={{ p: 3, bgcolor: 'background.paper', boxShadow: 3, borderRadius: 2 }}>
+                     <Typography variant="h6" gutterBottom sx={{ mb: 2, fontWeight: 'bold', color: 'text.primary' }}>
+                         Booked Sites
+                     </Typography>
+                     <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
+                         <Table stickyHeader aria-label="booked sites table">
+                             <TableHead>
+                                 <TableRow>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Site ID</TableCell>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Client ID</TableCell>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Booking Date</TableCell>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Check-In Date</TableCell>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Check-Out Date</TableCell>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Total Price</TableCell>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Discount</TableCell>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Net Total</TableCell>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Payment Deadline</TableCell>
+                                     <TableCell align="center" sx={{ fontWeight: 'bold' }}>Payment Completed</TableCell>
+                                 </TableRow>
+                             </TableHead>
+                             <TableBody>
+                                 {Array.isArray(bookings) && bookings.map((booking) => (
+                                     <TableRow key={booking.id} hover>
+                                         <TableCell align="center">{booking.siteId}</TableCell>
+                                         <TableCell align="center">{booking.clientId}</TableCell>
+                                         <TableCell align="center">{new Date(booking.bookingDate).toLocaleString()}</TableCell>
+                                         <TableCell align="center">{new Date(booking.checkInDate).toLocaleDateString()}</TableCell>
+                                         <TableCell align="center">{new Date(booking.checkOutDate).toLocaleDateString()}</TableCell>
+                                         <TableCell align="center">{booking.status}</TableCell>
+                                         <TableCell align="center">${booking.totalPrice}</TableCell>
+                                         <TableCell align="center">${booking.discount}</TableCell>
+                                         <TableCell align="center">${booking.netTotal}</TableCell>
+                                         <TableCell align="center">{new Date(booking.paymentDeadline).toLocaleDateString()}</TableCell>
+                                         <TableCell align="center">{booking.paymentCompleted ? "Yes" : "No"}</TableCell>
+                                     </TableRow>
+                                 ))}
+                             </TableBody>
+                         </Table>
+                     </TableContainer>
+                 </Box>
                 )}
 
                 {/* {activeSection === 'promotions' && (
