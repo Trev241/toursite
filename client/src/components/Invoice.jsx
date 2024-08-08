@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Amount } from "./Amount";
+import Logo from "./Logo";
 
 const Invoice = ({ data, next }) => {
   const navigate = useNavigate();
@@ -8,13 +9,23 @@ const Invoice = ({ data, next }) => {
     navigate("/");
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <>
       <div className="container mx-auto flex flex-col items-center">
-        <div className="p-8 rounded border-gray-300 border m-8">
-          <h1 className="text-5xl mb-4">Invoice</h1>
+        <div
+          id="invoice"
+          className="w-full p-8 rounded border-gray-300 border m-8"
+        >
+          <div className="flex justify-between mb-8">
+            <h1 className="text-5xl mb-4">Invoice</h1>
+            <Logo />
+          </div>
 
-          <div className="w-[500px] ">
+          <div>
             <div className="mb-4">
               <h2 className="me-2">Billed at</h2>
               <span className="text-3xl">
@@ -95,7 +106,13 @@ const Invoice = ({ data, next }) => {
         </div>
       </div>
 
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end mb-4 print:hidden">
+        <button
+          onClick={handlePrint}
+          className="text-sm mt-2 mx-2 rounded px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white whitespace-no-wrap"
+        >
+          Print
+        </button>
         <button
           onClick={handleNext}
           className="text-sm mt-2 rounded px-4 py-2 bg-green-600 hover:bg-green-500 text-white whitespace-no-wrap"
@@ -103,6 +120,11 @@ const Invoice = ({ data, next }) => {
           Continue
         </button>
       </div>
+
+      <iframe
+        id="ifmcontentstoprint"
+        style={{ height: "0px", width: "0px", position: "absolute" }}
+      ></iframe>
     </>
   );
 };

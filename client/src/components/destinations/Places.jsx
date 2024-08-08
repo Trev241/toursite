@@ -52,7 +52,7 @@ const Places = () => {
     <div className="dark:bg-white dark:text-black bg-gray-50 py-10">
       <section className="container mx-auto max-w-screen-xl px-4">
         <h1 className="my-8 py-2 text-6xl">We recommend checking out...</h1>
-        <div className="space-y-6">
+        <div className="">
           {sites.map((item) => (
             <div
               key={item.id}
@@ -69,9 +69,9 @@ const Places = () => {
                 <h2 className="text-2xl">
                   {item.city}, {item.country}
                 </h2>
-                <p className="text-gray-800 mb-4 min-h-30">
+                {/* <p className="text-gray-800 mb-4 min-h-30">
                   {item.description}
-                </p>
+                </p> */}
                 <p className="text-gray-600 mb-2">{item.phone}</p>
               </div>
               <div className="text-right">

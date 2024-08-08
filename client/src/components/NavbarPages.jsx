@@ -5,6 +5,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { HiOutlineMenuAlt4 } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
+import Logo from "./Logo";
 
 function NavbarPages({ onAuthModalToggle, username, isHeader }) {
   const [nav, setNav] = useState(false);
@@ -39,9 +40,7 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
     >
       <div className="flex items-center">
         <Link to="/" onClick={() => navigate("/")}>
-          <div className="tracking-tighter text-4xl">
-            tour<span className="font-bold px-1 tracking-tightest">SI</span>te
-          </div>
+          <Logo />
         </Link>
       </div>
 
