@@ -3,6 +3,7 @@ package humber.ds.toursite.model;
 import java.util.List;
 
 import humber.ds.toursite.enums.SiteStatus;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ public class Site {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String title;
     private String street;
     private String city;
     private String zip;
@@ -23,6 +25,8 @@ public class Site {
     private String phone;
     private SiteStatus status;
     private double price;
+
+    @Column(length = 5000)
     private String description;
 
     @OneToMany(fetch = FetchType.LAZY)
@@ -33,8 +37,9 @@ public class Site {
         this.status = SiteStatus.AVAILABLE;
     }
 
-    Site(String street, String city, String zip, String country, String phone, SiteStatus status,
+    Site(String title, String street, String city, String zip, String country, String phone, SiteStatus status,
             double price, String description, List<Photo> photos) {
+        this.title = title;
         this.street = street;
         this.city = city;
         this.zip = zip;
@@ -48,6 +53,10 @@ public class Site {
 
     public Long getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getStreet() {
@@ -80,6 +89,10 @@ public class Site {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setStreet(String street) {

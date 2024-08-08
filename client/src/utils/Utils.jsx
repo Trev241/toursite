@@ -1,4 +1,4 @@
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 function treatAsUTC(date) {
   var result = new Date(date);
@@ -23,3 +23,21 @@ export async function getImageURL(uri) {
 
   return url;
 }
+
+export const uploadFile = async (files) => {
+  console.log(files);
+  const urls = [];
+
+  for (const file of files) {
+    console.log(file.name);
+    const storageRef = ref(getStorage(), file.name);
+
+    const snapshot = await uploadBytes(storageRef, file);
+    console.log(snapshot);
+
+    urls.push(await getDownloadURL(snapshot.ref));
+  }
+
+  console.log(urls);
+  return urls;
+};
