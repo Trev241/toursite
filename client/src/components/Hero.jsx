@@ -31,9 +31,9 @@ const Hero = () => {
       />
       <div className="absolute w-full h-full top-0 left-0 bg-gray-900/30">
         <div className="animate-fade absolute top-0 w-full h-full flex flex-col justify-center text-center text-white p-4 ">
-          <div className="flex flex-col">
+          <div className="flex flex-col ml-5">
             <div className="w-max">
-              <h1 className="text-8xl py-4 overflow-hidden whitespace-nowrap mb-2">
+              <h1 className="text-8xl py-4 overflow-hidden whitespace-nowrap mb-2 typewriter">
                 Let's go on a tour
               </h1>
             </div>
@@ -41,7 +41,7 @@ const Hero = () => {
               Get started by typing in your dream destination.
             </p>
           </div>
-          <form className="flex justify-start px-1">
+          <form className="flex justify-start px-1 ml-5">
             <div>
               <input
                 className="w-96 bg-white text-black border-gray-200 focus:outline-none rounded p-2"
