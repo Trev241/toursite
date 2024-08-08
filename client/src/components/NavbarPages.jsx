@@ -46,7 +46,6 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
       </div>
 
       <div className="flex items-center space-x-4">
-        <BiSearch className="hidden md:block" size={20} />
         <div className="relative">
           <BsPerson
             size={20}
