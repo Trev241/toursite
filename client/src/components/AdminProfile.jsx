@@ -303,12 +303,12 @@ const AdminProfile = () => {
           <ListItem
             button
             onClick={() => handleSectionChange("promotions")}
-            sx={{ borderBottom: "1px solid #e0e0e0" }}
+            // sx={{ borderBottom: "1px solid #e0e0e0" }}
           >
-            <ListItemIcon>
+            {/* <ListItemIcon>
               <PromotionsIcon color="primary" />
             </ListItemIcon>
-            <ListItemText primary="Promotions" />
+            <ListItemText primary="Promotions" /> */}
           </ListItem>
           <ListItem
             button
