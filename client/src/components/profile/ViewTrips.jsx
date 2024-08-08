@@ -45,7 +45,7 @@ const ViewTrips = () => {
                 filtered = trips.filter(trip => trip.status === 'CANCELLED');
                 break;
             case 'past':
-                filtered = trips.filter(trip => new Date(trip.checkOutDate) < today);
+                filtered = trips.filter(trip => trip.checkOutDate < today);
                 break;
             default:
                 filtered = trips;
@@ -73,8 +73,8 @@ const ViewTrips = () => {
                         onClick={() => handleCardClick(trip.id)}
                     >
                         <h2 className="text-xl font-bold mb-2">Trip to {trip.city}, {trip.country}</h2>
-                        <p className="text-gray-700 mb-2">Check-in: {new Date(trip.checkInDate).toLocaleDateString()}</p>
-                        <p className="text-gray-700 mb-2">Check-out: {new Date(trip.checkOutDate).toLocaleDateString()}</p>
+                        <p className="text-gray-700 mb-2">Check-in: {(trip.checkInDate)}</p>
+                        <p className="text-gray-700 mb-2">Check-out: {(trip.checkOutDate)}</p>
                         <p className="text-gray-700 mb-2">Price one night: ${trip.price.toFixed(2)}</p>
                         <p className="text-gray-700 mb-2">Net Total: ${trip.netTotal.toFixed(2)}</p>
                     </div>

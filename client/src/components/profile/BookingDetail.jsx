@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { API_BASE_URL } from '../..//constants/Constants';
 import Swal from 'sweetalert2';
+import { parseISO, format } from 'date-fns';
 
 const BookingDetail = () => {
     const { bookingId } = useParams();
@@ -12,6 +13,7 @@ const BookingDetail = () => {
     const [checkOutDate, setCheckOutDate] = useState(null);
     const [price, setPrice] = useState(0);
     const [siteId, setSiteId] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,8 +22,8 @@ const BookingDetail = () => {
                 const response = await fetch(`${API_BASE_URL}/booking-detail/${bookingId}`);
                 const bookingData = await response.json();
                 setBooking(bookingData);
-                setCheckInDate(new Date(bookingData.checkInDate));
-                setCheckOutDate(new Date(bookingData.checkOutDate));
+                setCheckInDate(parseISO(bookingData.checkInDate));
+                setCheckOutDate(parseISO(bookingData.checkOutDate));
                 setPrice(bookingData.price);
                 setSiteId(bookingData.siteId);
             } catch (err) {
@@ -33,6 +35,15 @@ const BookingDetail = () => {
     }, [bookingId]);
 
     const handleSave = async () => {
+        if (checkOutDate <= checkInDate) {
+            Swal.fire({
+                title: 'Invalid Date Range',
+                text: 'Check-out date must be later than check-in date.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
         const updatedBooking = {
             bookingId: bookingId,
             checkInDate: checkInDate.toISOString().split('T')[0],
@@ -61,7 +72,7 @@ const BookingDetail = () => {
                         icon: 'warning',
                         confirmButtonText: 'OK'
                     });
-                    navigate(`/profile/view-trips`)
+                    navigate(`/profile/view-trips`);
                 } else if (booking.status === 'PROCESSING') {
                     Swal.fire({
                         title: 'Success',
@@ -85,6 +96,40 @@ const BookingDetail = () => {
         }
     };
 
+    const handleCancel = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${API_BASE_URL}/booking/${bookingId}/cancel`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'Your booking has been cancelled successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+                navigate(`/profile/view-trips`);
+            } else {
+                throw new Error('Failed to cancel booking');
+            }
+        } catch (err) {
+            console.error('Error cancelling booking:', err);
+            Swal.fire({
+                title: 'Error',
+                text: 'There was an error cancelling the booking. Please try again later.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return booking ? (
         <div className="container mx-auto p-4 max-w-6xl">
             <div className="bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-4">
@@ -93,21 +138,29 @@ const BookingDetail = () => {
                     <p className="text-gray-700 mb-2">City: {booking.city}</p>
                     <p className="text-gray-700 mb-2">Country: {booking.country}</p>
                     <div className="mb-4">
-                        <label className="block text-gray-700">Check-in Date:</label>
+                        <label className="block text-gray-700">
+                            Check-in Date:
+                        </label>
                         <DatePicker
                             selected={checkInDate}
                             onChange={date => setCheckInDate(date)}
-                            dateFormat="dd/MM/yyyy"
+                            dateFormat="MM/dd/yyyy"
                             className="w-full mt-1 p-2 border rounded"
+                            minDate={new Date()}
+                            disabled={!(booking.status === 'PROCESSING' || booking.status === 'PENDING')} 
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-gray-700">Check-out Date:</label>
+                        <label className="block text-gray-700">
+                            Check-out Date:
+                        </label>
                         <DatePicker
                             selected={checkOutDate}
                             onChange={date => setCheckOutDate(date)}
-                            dateFormat="dd/MM/yyyy"
+                            dateFormat="MM/dd/yyyy"
                             className="w-full mt-1 p-2 border rounded"
+                            minDate={checkInDate || new Date()}
+                            disabled={!(booking.status === 'PROCESSING' || booking.status === 'PENDING')}
                         />
                     </div>
                     <p className="text-gray-700 mb-2">Price: {booking.price}</p>
@@ -129,7 +182,23 @@ const BookingDetail = () => {
                             Proceed to Payment
                         </button>
                     )}
+                    {booking.status === 'CONFIRMED' && (
+                        <button
+                            onClick={handleCancel}
+                            className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 ml-4"
+                        >
+                            Cancel
+                        </button>
+                    )}
                 </div>
+                {loading && (
+                    <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+                        <div className="bg-white p-8 rounded-lg shadow-lg">
+                            <p className="text-xl font-bold mb-4">Cancelling Booking...</p>
+                            <p className="text-gray-700">Please wait while we process your request.</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     ) : (

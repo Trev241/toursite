@@ -43,7 +43,7 @@ public class BookingController {
         return bookingService.one(id);
     }
 
-    @PutMapping("/{bookingId}/cancel")
+    @PostMapping("/booking/{bookingId}/cancel")
     public void cancelBooking(@PathVariable Long bookingId) {
         bookingService.cancelBooking(bookingId);
     }

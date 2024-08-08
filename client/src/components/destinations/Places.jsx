@@ -23,21 +23,20 @@ const Places = () => {
                             : null;
                 }
                 setAllSites(data);
-                setSites(data); // Set sites to display all initially
+                setSites(data);
             })
             .catch((error) => console.error("Error fetching data:", error));
-    }, []); // No dependencies needed, fetch data once on mount
+    }, []);
 
     useEffect(() => {
         if (searchParams.get("destination")) {
-            // Apply filter based on search parameters
             const filteredSites = allSites.filter((item) => {
                 let query = new RegExp(searchParams.get("destination"), "i");
                 return query.test(item.street) || query.test(item.city) || query.test(item.country);
             });
             setSites(filteredSites);
         } else {
-            setSites(allSites); // Set sites to all if no search parameter is present
+            setSites(allSites);
         }
     }, [searchParams, allSites, setSites]);
 
@@ -60,7 +59,7 @@ const Places = () => {
                             <div
                                 className="w-64 h-40 flex items-center justify-center overflow-hidden rounded-md border border-gray-300">
                                 <img
-                                    src={item.url || DefaultRoomImage} // Use the image URL from the site object
+                                    src={item.url || DefaultRoomImage}
                                     alt={item.description}
                                     className="object-cover h-full w-full"
                                 />
