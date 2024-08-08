@@ -32,6 +32,7 @@ public class ClientServiceImp implements ClientService {
         if (!clientsWithEmail.isEmpty())
             throw new UsedEmailException();
 
+        client.setRole("user");
         return clientRepository.save(client);
     }
 
