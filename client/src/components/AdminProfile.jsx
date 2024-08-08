@@ -79,18 +79,6 @@ const AdminProfile = () => {
             .then(data => setBookings(data))
             .catch((error) => console.error("Error fetching booked sites data:", error));
 
-        // Fetch promotions data from API
-        // fetch("http://localhost:8081/api/v1/promotions")
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         const active = data.filter(promo => !promo.redeemed);
-        //         const inactive = data.filter(promo => promo.redeemed);
-        //         setActivePromotions(active);
-        //         setInactivePromotions(inactive);
-        //         setPromotions(data);
-        //     })
-        //     .catch((error) => console.error("Error fetching promotions data:", error));
-
         // Fetch coupons data from API
         fetch("http://localhost:8081/api/v1/coupons")
             .then((response) => response.json())
@@ -278,16 +266,6 @@ const AdminProfile = () => {
                     </ListItem>
                     <ListItem
                         button
-                        onClick={() => handleSectionChange('promotions')}
-                        sx={{borderBottom: '1px solid #e0e0e0'}}
-                    >
-                        <ListItemIcon>
-                            <PromotionsIcon color="primary"/>
-                        </ListItemIcon>
-                        <ListItemText primary="Promotions"/>
-                    </ListItem>
-                    <ListItem
-                        button
                         onClick={() => handleSectionChange('coupons')}
                         sx={{borderBottom: '1px solid #e0e0e0'}}
                     >
@@ -401,59 +379,6 @@ const AdminProfile = () => {
                    </Box>
                 )}
 
-                {/* {activeSection === 'promotions' && (
-          <Box>
-            <Typography variant="h6" gutterBottom>Promotions</Typography>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              startIcon={<AddIcon />} 
-              onClick={() => setOpenPromotionForm(true)}
-              sx={{ marginBottom: 2 }}
-            >
-              Add Promotion
-            </Button>
-            <Typography variant="h6" gutterBottom>Active Promotions</Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Discount Rate</TableCell>
-                    <TableCell>Flat Discount</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {activePromotions.map((promo) => (
-                    <TableRow key={promo.id}>
-                      <TableCell>{promo.discountRate}%</TableCell>
-                      <TableCell>${promo.flatDiscount}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <Typography variant="h6" gutterBottom>Inactive Promotions</Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Discount Rate</TableCell>
-                    <TableCell>Flat Discount</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {inactivePromotions.map((promo) => (
-                    <TableRow key={promo.id}>
-                      <TableCell>{promo.discountRate}%</TableCell>
-                      <TableCell>${promo.flatDiscount}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-        )} */}
-
                 {activeSection === 'coupons' && (
                     <Box>
                         <Typography variant="h6" gutterBottom>Coupons</Typography>
@@ -560,35 +485,6 @@ const AdminProfile = () => {
                     <Button onClick={handleSubmitSite} color="primary">Add Site</Button>
                 </DialogActions>
             </Dialog>
-
-            {/* Add Promotion Form Dialog */}
-            {/* <Dialog open={openPromotionForm} onClose={handleFormClose}>
-        <DialogTitle>Add New Promotion</DialogTitle>
-        <DialogContent>
-          <TextField
-            name="discountRate"
-            label="Discount Rate (%)"
-            type="number"
-            fullWidth
-            margin="normal"
-            value={newPromotion.discountRate}
-            onChange={handlePromotionChange}
-          />
-          <TextField
-            name="flatDiscount"
-            label="Flat Discount ($)"
-            type="number"
-            fullWidth
-            margin="normal"
-            value={newPromotion.flatDiscount}
-            onChange={handlePromotionChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleFormClose}>Cancel</Button>
-          <Button onClick={handleSubmitPromotion} color="primary">Add Promotion</Button>
-        </DialogActions>
-      </Dialog> */}
 
             {/* Add Coupon Form Dialog */}
             <Dialog open={openCouponForm} onClose={handleFormClose}>

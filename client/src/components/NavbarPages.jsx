@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { BsPerson } from "react-icons/bs";
 import { BiSearch } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
@@ -12,11 +12,10 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
   const [logo, setLogo] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { client, logout } = useContext(AuthContext);
+  const dropdownRef = useRef(null); // Ref for the dropdown container
 
   const navigate = useNavigate();
   const location = useLocation();
-
-  console.log(location.pathname);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -27,8 +26,22 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
     setDropdownOpen(false);
     navigate("/"); // Redirect to home page
   };
+
   // Determine the profile link based on the client's role
   const profileLink = client?.role === "admin" ? "/admin-profile" : "/profile";
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div
@@ -53,7 +66,7 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
           />
         </div>
         {client && client.email && (
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             <div className="cursor-pointer" onClick={toggleDropdown}>
               <h2 className="text-sm">{client.email}</h2>
             </div>
@@ -67,7 +80,7 @@ function NavbarPages({ onAuthModalToggle, username, isHeader }) {
                 <div className="flex flex-col items-center">
                   <Link to={profileLink}>View Profile</Link>
                   <button
-                    onClick={handleLogout} // Call handleLogout instead
+                    onClick={handleLogout}
                     className="text-red-500 hover:underline"
                   >
                     Logout
